@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+
+"""
+This script performs two main analyses on image rotation using both our custom library (BSSP)
+and SciPy's ndimage.map_coordinates for comparison.
+
+1) For a specific spline order, the script rotates an image by 360 degrees through 36 iterations 
+of 10 degrees each. It compares the performance (time spent and Signal-to-Noise Ratio (SNR)) 
+between the BSSP library and SciPy.
+
+2) The script repeats the first analysis with different spline orders ranging from 0 to 5. It then plots 
+the time spent versus SNR for each order, allowing for a visual comparison between the BSSP 
+library and SciPy's implementation across different spline orders.
+"""
+
 import numpy as np
 from scipy import ndimage, datasets
 import matplotlib.pyplot as plt
@@ -50,7 +64,7 @@ def crop_image_to_bounds(image, bounds):
     - numpy.ndarray: The cropped image as a 2D numpy array.
     """
     x_min, y_min, x_max, y_max = bounds
-    
+
     # Directly use the provided bounds to crop the image
     return image[y_min:y_max, x_min:x_max]
 
