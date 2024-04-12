@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
 import cupy as cp
+import cupyx.profiler
 from scipy import ndimage
 import matplotlib.pyplot as plt
 import time
@@ -97,25 +98,14 @@ def calculate_snr(original, processed):
 def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1):
     """
     Rotate an image by a specified angle using the BSSP library's TensorSpline method and crop the result.
-
-    Parameters:
-    - image (numpy.ndarray): The input image to rotate.
-    - angle (float): Rotation angle in degrees.
-    - order (int): The order of the spline interpolation. Default is 3.
-    - mode (str): The mode of extrapolation. Default is 'zero'.
-    - iterations (int): The number of times the rotation is applied. Default is 5.
-
-    Returns:
-    - numpy.ndarray: The rotated and cropped image.
     """
     dtype = image.dtype
     ny, nx = image.shape
     xx = np.linspace(0, nx - 1, nx, dtype=dtype)
     yy = np.linspace(0, ny - 1, ny, dtype=dtype)
     data = np.ascontiguousarray(image, dtype=dtype)
-    rotated_image = data.copy()
 
-    rotated_image_cp = cp.asarray(rotated_image)
+    rotated_image_cp = cp.asarray(data)
     xx_cp = cp.asarray(xx)
     yy_cp = cp.asarray(yy)
 
@@ -147,6 +137,9 @@ def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1)
         interpolated_values_np = interpolated_values_cp.get()
 
         rotated_image = interpolated_values_np.reshape(ny, nx)
+
+        # Clean up memory explicitly if necessary (not always required if using memory pool)
+        cp.get_default_memory_pool().free_all_blocks()
 
     return rotated_image
 
@@ -203,10 +196,11 @@ def benchmark_and_display_rotation(size, angle, order, iterations):
     plt.show()
 
 
+"""
 def benchmark_rotation(size, angle, order, iterations):
-    """
+    ""
     Perform a benchmark of the rotation operation for both BSSP and SciPy libraries.
-    """
+    ""
     image = generate_artificial_image(size)
 
     # BSSP Rotation (GPU accelerated)
@@ -228,11 +222,37 @@ def benchmark_rotation(size, angle, order, iterations):
     time_scipy = end_cpu_scipy - start_cpu_scipy  # Calculate elapsed CPU time for SciPy
 
     return size, time_bssp, time_scipy
+"""
+
+
+def benchmark_rotation(size, angle, order, iterations):
+    """
+    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries.
+    """
+    image = generate_artificial_image(size)
+
+    # Warm-up (important for JIT)
+    rotate_image_and_crop_bssp(image, angle=angle, order=order, iterations=1)
+
+    # Benchmark using cupyx.profiler
+    result_bssp = cupyx.profiler.benchmark(
+        rotate_image_and_crop_bssp,
+        (image, angle, order, "zero", iterations),
+        n_repeat=1,  # Number of repeats to average over
+    )
+
+    # SciPy Rotation (CPU only) - continue using time.perf_counter for CPU benchmarks
+    start_cpu_scipy = time.perf_counter()
+    rotate_image_and_crop_scipy(image, angle=angle, order=order, iterations=iterations)
+    end_cpu_scipy = time.perf_counter()
+    time_scipy = end_cpu_scipy - start_cpu_scipy
+
+    return size, result_bssp.cpu_times.mean(), time_scipy
 
 
 # List of image sizes to benchmark
-image_sizes = [10, 50, 100, 500, 1000, 5000, 10000]
-# image_sizes = [100, 500, 1000, 5000]
+# image_sizes = [10, 50, 100, 500, 1000, 5000, 10000]
+image_sizes = [100, 500, 1000, 5000, 10000]
 # Placeholder lists to store benchmark results
 sizes = []
 times_bssp = []
