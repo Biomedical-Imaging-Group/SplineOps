@@ -252,7 +252,8 @@ def benchmark_rotation(size, angle, order, iterations):
 
 # List of image sizes to benchmark
 # image_sizes = [10, 50, 100, 500, 1000, 5000, 10000]
-image_sizes = [100, 500, 1000, 5000, 10000]
+# image_sizes = [100, 500, 1000, 5000, 10000]
+image_sizes = [100, 500, 1000]
 # Placeholder lists to store benchmark results
 sizes = []
 times_bssp = []
