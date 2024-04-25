@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from scipy import ndimage
 from bssp.interpolate.tensorspline import TensorSpline
 import time
-
 import math
+import cupyx.scipy.ndimage
 
 
 def generate_artificial_image(size):
@@ -32,6 +32,7 @@ def warm_up_and_time_gpu(
 
     # Warm-up run
     _ = tensor_spline_cp(coordinates=eval_coords_cp)
+    del _
 
     # Timed runs
     times = []
@@ -44,19 +45,35 @@ def warm_up_and_time_gpu(
         cp.cuda.Stream.null.synchronize()  # Ensure GPU computation is complete
         end_time = time.time()
         times.append(end_time - start_time)
+        del data_eval_cp  # Free memory immediately
 
     scaled_image_np = cp.asnumpy(scaled_image_cp)
+    del scaled_image_cp  # Free memory immediately
+    cp.get_default_memory_pool().free_all_blocks()
     return scaled_image_np, np.mean(times)
 
 
 def scale_image_ndimage(image, scale_row, scale_col, iterations=5):
+    dtype = image.dtype
+    image_cp = cp.asarray(image)  # Convert the image to CuPy array for GPU processing
     times = []
     for _ in range(iterations):
         start_time = time.time()
-        scaled_image = ndimage.zoom(image, (scale_row, scale_col), order=3)
+        scaled_image_cp = cupyx.scipy.ndimage.zoom(
+            image_cp, (scale_row, scale_col), order=3
+        )
+        cp.cuda.Stream.null.synchronize()  # Ensure GPU computation is complete
         end_time = time.time()
         times.append(end_time - start_time)
-    return scaled_image, np.mean(times)
+        if _ == iterations - 1:  # Convert to NumPy only after the last iteration
+            scaled_image_np = cp.asnumpy(scaled_image_cp)
+        del scaled_image_cp  # Free GPU memory immediately after use
+
+    cp.get_default_memory_pool().free_all_blocks()  # Free any unused memory blocks
+    return scaled_image_np, np.mean(times)
+
+
+# Rest of the script remains unchanged
 
 
 size = 1000
@@ -67,7 +84,7 @@ scaled_image_gpu, time_gpu = warm_up_and_time_gpu(image_np, scale_row, scale_col
 scaled_image_nd, time_nd = scale_image_ndimage(image_np, scale_row, scale_col)
 
 print(f"Average BSSP Time: {time_gpu:.4f} seconds")
-print(f"Average scipy.ndimage Time: {time_nd:.4f} seconds")
+print(f"Average cupyx.scipy.ndimage Time: {time_nd:.4f} seconds")
 
 fig, axs = plt.subplots(1, 3, figsize=(18, 6))
 axs[0].imshow(image_np, cmap="gray", interpolation="nearest")
@@ -81,7 +98,7 @@ axs[1].axis("on")
 axs[1].grid(True)
 
 axs[2].imshow(scaled_image_nd, cmap="gray", interpolation="nearest")
-axs[2].set_title(f"scipy.ndimage Scaled Image\nTime: {time_nd:.4f} s")
+axs[2].set_title(f"Cupyx.scipy.ndimage Scaled Image\nTime: {time_nd:.4f} s")
 axs[2].axis("on")
 axs[2].grid(True)
 
