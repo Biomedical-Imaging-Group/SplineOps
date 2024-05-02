@@ -15,6 +15,24 @@ TExtensionModes = Union[TExtensionMode, Sequence[TExtensionMode]]
 
 
 class TensorSpline:
+    """
+    Represents a tensor spline model for multidimensional data interpolation
+    using spline bases and extension modes.
+
+    Attributes:
+        coefficients (npt.NDArray): The coefficients of the tensor spline model.
+        bases (Tuple[SplineBasis, ...]): The spline bases used for each dimension.
+        modes (Tuple[ExtensionMode, ...]): The extension modes used for each dimension.
+        ndim (int): The number of dimensions of the input data.
+
+    Args:
+        data (npt.NDArray): The data array to fit the tensor spline model.
+        coordinates (Union[npt.NDArray, Sequence[npt.NDArray]]): The coordinates
+            corresponding to each dimension of the data.
+        bases (TSplineBases): Spline bases for each dimension.
+        modes (TExtensionModes): Extension modes for each dimension.
+    """
+
     def __init__(
         self,
         data: npt.NDArray,
@@ -26,6 +44,10 @@ class TensorSpline:
         # TODO(dperdios): axis? axes? probably complex
         # TODO(dperdios): optional reduction strategy (e.g., first or last)
     ) -> None:
+        """
+        Initializes the TensorSpline object by setting up the data structure,
+        validating input types, and computing initial coefficients for the tensor spline model.
+        """
 
         # Data
         if not is_ndarray(data):
@@ -122,18 +144,42 @@ class TensorSpline:
     # Properties
     @property
     def coefficients(self) -> npt.NDArray:
+        """
+        Provides a copy of the coefficients of the tensor spline model.
+
+        Returns:
+            npt.NDArray: A copy of the model's coefficients.
+        """
         return np.copy(self._coefficients)
 
     @property
     def bases(self) -> Tuple[SplineBasis, ...]:
+        """
+        Provides the spline bases used in the model.
+
+        Returns:
+            Tuple[SplineBasis, ...]: The spline bases for each dimension.
+        """
         return self._bases
 
     @property
     def modes(self) -> Tuple[ExtensionMode, ...]:
+        """
+        Provides the extension modes used in the model.
+
+        Returns:
+            Tuple[ExtensionMode, ...]: The extension modes for each dimension.
+        """
         return self._modes
 
     @property
     def ndim(self):
+        """
+        Provides the number of dimensions of the input data.
+
+        Returns:
+            int: The number of dimensions.
+        """
         return self._ndim
 
     # Methods
@@ -143,11 +189,32 @@ class TensorSpline:
         grid: bool = True,
         # TODO(dperdios): extrapolate?
     ) -> npt.NDArray:
+        """
+        Evaluates the tensor spline model at given coordinates.
+
+        Args:
+            coordinates (Union[npt.NDArray, Sequence[npt.NDArray]]): Coordinates at which to evaluate the model.
+            grid (bool): Specifies whether the coordinates represent a regular grid.
+
+        Returns:
+            npt.NDArray: The evaluated data at the given coordinates.
+        """
         return self.eval(coordinates=coordinates, grid=grid)
 
     def eval(
         self, coordinates: Union[npt.NDArray, Sequence[npt.NDArray]], grid: bool = True
     ) -> npt.NDArray:
+        """
+        Evaluates the tensor spline model at given coordinates, explicitly allowing
+        control over whether the coordinates are interpreted as a grid.
+
+        Args:
+            coordinates (Union[npt.NDArray, Sequence[npt.NDArray]]): Coordinates at which to evaluate the model.
+            grid (bool): Specifies whether the coordinates represent a regular grid.
+
+        Returns:
+            npt.NDArray: The evaluated data at the given coordinates.
+        """
 
         # Check coordinates
         ndim = self._ndim
@@ -274,6 +341,15 @@ class TensorSpline:
         return data
 
     def _compute_coefficients(self, data: npt.NDArray) -> npt.NDArray:
+        """
+        Computes the coefficients for the tensor spline based on the input data.
+
+        Args:
+            data (npt.NDArray): The input data from which to compute the coefficients.
+
+        Returns:
+            npt.NDArray: The computed coefficients for the tensor spline model.
+        """
 
         # Prepare data and axes
         # TODO(dperdios): there is probably too many copies along this process
