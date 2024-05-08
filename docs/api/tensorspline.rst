@@ -1,4 +1,4 @@
-TensorSpline API Documentation
+API Reference
 ==============================
 
 .. automodule:: bssp.interpolate.tensorspline

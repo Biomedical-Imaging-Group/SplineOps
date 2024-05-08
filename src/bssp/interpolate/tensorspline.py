@@ -44,7 +44,7 @@ class TensorSpline:
 
         import numpy as np
         import matplotlib.pyplot as plt
-        from your_package.interpolate.tensorspline import TensorSpline  # Adjust import as necessary
+        from bssp.interpolate.tensorspline import TensorSpline  # Adjust import as necessary
 
         # Data type (need to provide floating numbers, "float64" and "float32" are typical)
         dtype = "float32"
@@ -129,7 +129,7 @@ class TensorSpline:
 
         import numpy as np
         import matplotlib.pyplot as plt
-        from your_package.interpolate.tensorspline import TensorSpline  # Adjust import as necessary
+        from bssp.interpolate.tensorspline import TensorSpline  # Adjust import as necessary
 
         # Data type (need to provide floating numbers, "float64" and "float32" are typical)
         dtype = "float32"

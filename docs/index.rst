@@ -2,7 +2,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to bssp's documentation!
+Welcome to BSSP documentation
 ================================
 
 .. toctree::
@@ -21,57 +21,46 @@ Features of BSSP
         :shadow: none
         :class-card: sd-border-0
 
-        .. figure:: _static/logo.png
-           :scale: 5%
+        .. figure:: _static/feature_01.png
+           :scale: 50%
            :class: no-scaled-link
 
         .. raw:: html
 
             <p style="text-align: center;">
-            <strong> High Performance </strong> <br/>
-            Optimized for high-speed computation on large datasets.
+            <strong> Optimized Performance </strong> <br/>
+            Engineered for optimal efficiency, leveraging both CPU and GPU architectures to handle large-scale signal data sets swiftly and effectively.
             </p>
 
     .. grid-item-card::
         :shadow: none
         :class-card: sd-border-0
 
-        .. figure:: _static/logo.png
-           :scale: 5%
+        .. figure:: _static/feature_02.png
+           :scale: 50%
            :class: no-scaled-link
 
         .. raw:: html
 
             <p style="text-align: center;">
-            <strong> Multidimensional Interpolation </strong> <br/>
-            Flexible and powerful tools for multidimensional data.
+            <strong> Precision and Flexibility </strong> <br/>
+            Advanced capabilities for precise, high-degree spline interpolations across multiple dimensions, ensuring versatile and powerful data manipulation.
             </p>
 
     .. grid-item-card::
         :shadow: none
         :class-card: sd-border-0
 
-        .. figure:: _static/logo.png
-           :scale: 5%
+        .. figure:: _static/feature_03.png
+           :scale: 50%
            :class: no-scaled-link
 
         .. raw:: html
 
             <p style="text-align: center;">
-            <strong> Extensible </strong> <br/>
-            Easily extend with new functionalities for specific applications.
+            <strong> Scalability and Extensibility </strong> <br/>
+            Designed with scalability in mind, BSSP is straightforward to use and can be effortlessly expanded to incorporate new functionalities tailored to specific applications.
             </p>
-
-Partners & Sponsors
-===================
-
-.. raw:: html
-
-    <div style="text-align: center;">
-    <img src="_static/logo.png" alt="Partner Logo" style="margin-right: 10px;">
-    <img src="_static/logo.png" alt="Partner Logo" style="margin-right: 10px;">
-    <img src="_static/logo.png" alt="Partner Logo">
-    </div>
 
 Indices and tables
 ==================
