@@ -2,8 +2,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to BSSP documentation
-================================
+BSSP - B-Spline Signal Processing
+===================================
+
+.. raw:: html
+
+    <div id="hero" style="display: flex; align-items: center; justify-content: space-between;">
+        <div id="hero-left" style="flex: 1; margin-right: 20px;">
+            <p>
+                <strong>BSSP (B-Spline Signal Processing)</strong> is an innovative open-source software library dedicated to high-performance signal processing with B-splines. Designed to empower researchers, engineers, and data scientists, BSSP excels in processing large datasets efficiently, supporting both CPU and GPU computations across a wide spectrum of applications. From data smoothing to complex multidimensional data interpolation, BSSP offers precision and speed for your computational needs.
+            </p>
+            <p>
+                By embracing modern computing architectures and seamless integration with the PyData ecosystem, BSSP enhances computational pipelines, enabling users to focus on forward-thinking innovation and data exploration.
+            </p>
+        </div>
+        <div id="hero-right" style="flex: 1;">
+            <img src="_static/main_feature_image.png" alt="Main Feature of BSSP" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
 
 .. toctree::
    :maxdepth: 2
@@ -11,8 +27,8 @@ Welcome to BSSP documentation
 
    api/tensorspline
 
-Features of BSSP
-================
+Key Features & Capabilities
+==============================
 
 .. grid:: 2 2 2 3
     :gutter: 3
@@ -22,7 +38,7 @@ Features of BSSP
         :class-card: sd-border-0
 
         .. figure:: _static/feature_01.png
-           :scale: 50%
+           :scale: 25%
            :class: no-scaled-link
 
         .. raw:: html
@@ -37,7 +53,7 @@ Features of BSSP
         :class-card: sd-border-0
 
         .. figure:: _static/feature_02.png
-           :scale: 50%
+           :scale: 25%
            :class: no-scaled-link
 
         .. raw:: html
@@ -52,7 +68,7 @@ Features of BSSP
         :class-card: sd-border-0
 
         .. figure:: _static/feature_03.png
-           :scale: 50%
+           :scale: 25%
            :class: no-scaled-link
 
         .. raw:: html
