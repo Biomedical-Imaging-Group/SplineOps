@@ -8,16 +8,21 @@ TensorSpline API.
 #!/usr/bin/env python3
 import numpy as np
 import matplotlib.pyplot as plt
-
 from bssp.interpolate.tensorspline import TensorSpline
 
 
 def main():
-    # Section: Data Preparation
-    # Data type (need to provide floating numbers, "float64" and "float32" are typical)
+    """
+    Main function to demonstrate TensorSpline API usage.
+    """
+
+    # Data Preparation
+    """
+    Data type (need to provide floating numbers, "float64" and "float32" are typical)
+    Create random data samples and corresponding coordinates.
+    """
     dtype = "float32"
 
-    # Create random data samples and corresponding coordinates
     nx, ny = 2, 5
     xmin, xmax = -3.1, +1
     ymin, ymax = 2, 6.5
@@ -28,20 +33,21 @@ def main():
     data = prng.standard_normal(size=tuple(c.size for c in coordinates))
     data = np.ascontiguousarray(data, dtype=dtype)
 
-    # Section: Tensor Spline Setup
-    # Tensor spline bases
+    # Tensor Spline Setup
+    """
+    Tensor spline bases and signal extension modes.
+    """
     bases = "bspline3"  # same basis applied to all dimensions
-
-    # Tensor spline signal extension modes (sometimes referred to as boundary condition)
     modes = "mirror"  # same mode applied to all dimensions
 
-    # Create tensor spline
     tensor_spline = TensorSpline(
         data=data, coordinates=coordinates, bases=bases, modes=modes
     )
 
-    # Section: Evaluation Coordinates
-    # Create evaluation coordinates (extended and oversampled in this case)
+    # Evaluation Coordinates
+    """
+    Create evaluation coordinates (extended and oversampled in this case).
+    """
     dx = (xx[-1] - xx[0]) / (nx - 1)
     dy = (yy[-1] - yy[0]) / (ny - 1)
     pad_fct = 1.1
@@ -50,24 +56,33 @@ def main():
     eval_xx = np.linspace(xx[0] - px, xx[-1] + px, 100 * nx)
     eval_yy = np.linspace(yy[0] - py, yy[-1] + py, 100 * ny)
 
-    # Section: Standard Evaluation
-    # Standard evaluation
+    # Standard Evaluation
+    """
+    Perform a standard evaluation on a grid of coordinates.
+    """
     eval_coords = eval_xx, eval_yy
     data_eval = tensor_spline(coordinates=eval_coords)
 
-    # Meshgrid evaluation (not the default choice but could be useful in some cases)
+    # Meshgrid Evaluation
+    """
+    Evaluate using a meshgrid (not the default choice but could be useful in some cases).
+    """
     eval_coords_mg = np.meshgrid(*eval_coords, indexing="ij")
     data_eval_mg = tensor_spline(coordinates=eval_coords_mg, grid=False)
     np.testing.assert_equal(data_eval, data_eval_mg)
 
-    # Section: Points Evaluation
-    # We can also pass a list of points directly (i.e., not as a grid)
+    # Points Evaluation
+    """
+    Evaluate the tensor spline at a list of points directly.
+    """
     eval_coords_pts = np.reshape(eval_coords_mg, newshape=(2, -1))
     data_eval_pts = tensor_spline(coordinates=eval_coords_pts, grid=False)
     np.testing.assert_equal(data_eval, np.reshape(data_eval_pts, data_eval_mg.shape))
 
-    # Section: Visualization
-    # Figure
+    # Visualization
+    """
+    Visualize the original data samples and the interpolated data.
+    """
     fig: plt.Figure
     ax: plt.Axes
 

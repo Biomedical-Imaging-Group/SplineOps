@@ -17,6 +17,9 @@ from bssp.interpolate.tensorspline import TensorSpline
 
 
 def generate_artificial_image(size):
+    """
+    Generate an artificial image with uniform noise and blur it.
+    """
     image = np.random.uniform(low=0, high=255, size=(size, size)).astype(np.float32)
     blurred_image = ndimage.gaussian_filter(image, sigma=3)
     blurred_image = blurred_image.astype(np.float32)
@@ -24,6 +27,10 @@ def generate_artificial_image(size):
 
 
 def calculate_inscribed_rectangle_bounds_from_image(image):
+    """
+    Calculate the bounds for the largest rectangle that can be inscribed within a circle,
+    which itself is inscribed within the original image.
+    """
     height, width = image.shape[:2]
     radius = min(width, height) / 2
     side_length = radius * np.sqrt(2)
@@ -36,11 +43,17 @@ def calculate_inscribed_rectangle_bounds_from_image(image):
 
 
 def crop_image_to_bounds(image, bounds):
+    """
+    Crop an image to the specified bounds.
+    """
     x_min, y_min, x_max, y_max = bounds
     return image[y_min:y_max, x_min:x_max]
 
 
 def calculate_snr(original, processed):
+    """
+    Compute the Signal-to-Noise Ratio (SNR) between the original and processed images.
+    """
     original_normalized = original / 255.0 if original.max() > 1 else original
     processed_normalized = processed / 255.0 if processed.max() > 1 else processed
     noise = original_normalized - processed_normalized
@@ -52,6 +65,9 @@ def calculate_snr(original, processed):
 
 
 def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1):
+    """
+    Rotate an image by a specified angle using the BSSP library's TensorSpline method and crop the result.
+    """
     dtype = image.dtype
     ny, nx = image.shape
     xx = np.linspace(0, nx - 1, nx, dtype=dtype)
@@ -91,6 +107,9 @@ def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1)
 
 
 def rotate_image_and_crop_scipy(image, angle, order=3, iterations=1):
+    """
+    Rotate an image by a specified angle using SciPy's ndimage.rotate function and crop the result.
+    """
     rotated_image = image.copy()
     for _ in range(iterations):
         rotated_image = ndimage.rotate(
@@ -100,6 +119,9 @@ def rotate_image_and_crop_scipy(image, angle, order=3, iterations=1):
 
 
 def benchmark_and_display_rotation(size, angle, order, iterations):
+    """
+    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.
+    """
     image = generate_artificial_image(size)
     rotated_bssp = rotate_image_and_crop_bssp(
         image, angle, order=order, iterations=iterations
@@ -123,6 +145,9 @@ def benchmark_and_display_rotation(size, angle, order, iterations):
 
 
 def benchmark_rotation(size, angle, order, iterations):
+    """
+    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries.
+    """
     image = generate_artificial_image(size)
     rotate_image_and_crop_bssp(image, angle=angle, order=order, iterations=1)
     result_bssp = cupyx.profiler.benchmark(
