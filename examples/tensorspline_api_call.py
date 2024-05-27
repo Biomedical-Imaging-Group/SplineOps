@@ -107,5 +107,41 @@ def main():
     plt.show()
 
 
+def save_thumbnail():
+    dtype = "float32"
+    nx, ny = 2, 5
+    xx = np.linspace(-3.1, 1, nx, dtype=dtype)
+    yy = np.linspace(2, 6.5, ny, dtype=dtype)
+    coordinates = xx, yy
+    prng = np.random.default_rng(seed=5250)
+    data = prng.standard_normal(size=tuple(c.size for c in coordinates))
+    data = np.ascontiguousarray(data, dtype=dtype)
+
+    bases = "bspline3"
+    modes = "mirror"
+    tensor_spline = TensorSpline(
+        data=data, coordinates=coordinates, bases=bases, modes=modes
+    )
+
+    eval_xx = np.linspace(
+        xx[0] - 1.1 * nx * (xx[-1] - xx[0]) / (nx - 1),
+        xx[-1] + 1.1 * nx * (xx[-1] - xx[0]) / (nx - 1),
+        100 * nx,
+    )
+    eval_yy = np.linspace(
+        yy[0] - 1.1 * ny * (yy[-1] - yy[0]) / (ny - 1),
+        yy[-1] + 1.1 * ny * (yy[-1] - yy[0]) / (ny - 1),
+        100 * ny,
+    )
+    eval_coords = eval_xx, eval_yy
+    data_eval = tensor_spline(coordinates=eval_coords)
+
+    plt.imshow(data_eval.T, extent=[xx[0], xx[-1], yy[0], yy[-1]], cmap="viridis")
+    plt.axis("off")
+    plt.savefig("docs/_static/thumbnail_tensorspline_api_call.png", bbox_inches="tight")
+    plt.close()
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    save_thumbnail()

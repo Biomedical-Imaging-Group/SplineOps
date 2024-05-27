@@ -162,6 +162,16 @@ def benchmark_rotation(size, angle, order, iterations):
     return size, result_bssp.cpu_times.mean(), time_scipy
 
 
+def save_thumbnail():
+    image = generate_artificial_image(100)
+    rotated_image = rotate_image_and_crop_bssp(image, 360, order=3, iterations=1)
+
+    plt.imshow(rotated_image, cmap="gray")
+    plt.axis("off")
+    plt.savefig("docs/_static/thumbnail_image_rotation_2D.png", bbox_inches="tight")
+    plt.close()
+
+
 def main():
     image_sizes = [10, 50, 100]
     sizes = []
@@ -195,3 +205,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # save_thumbnail()
