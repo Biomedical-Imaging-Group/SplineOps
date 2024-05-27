@@ -1,3 +1,10 @@
+"""
+Example of using the TensorSpline API.
+
+This example demonstrates how to create a basic interpolation using the
+TensorSpline API.
+"""
+
 #!/usr/bin/env python3
 import numpy as np
 import cupy as cp

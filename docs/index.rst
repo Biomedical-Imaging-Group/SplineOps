@@ -25,7 +25,9 @@ BSSP - B-Spline Signal Processing
    :maxdepth: 2
    :caption: Contents:
 
-   api/tensorspline
+   user-guide/index
+   examples/index
+   api/index
 
 Key Features & Capabilities
 ==============================
@@ -77,10 +79,3 @@ Key Features & Capabilities
             <strong> Scalability and Extensibility </strong> <br/>
             Designed with scalability in mind, BSSP is straightforward to use and can be effortlessly expanded to incorporate new functionalities tailored to specific applications.
             </p>
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

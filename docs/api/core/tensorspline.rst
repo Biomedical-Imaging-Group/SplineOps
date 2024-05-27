@@ -1,5 +1,5 @@
-API Reference
-==============================
+Tensorspline
+============
 
 .. automodule:: bssp.interpolate.tensorspline
    :members:

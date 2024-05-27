@@ -24,6 +24,7 @@ extensions = [
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "matplotlib.sphinxext.plot_directive",
+    "nbsphinx",
 ]
 
 templates_path = ["_templates"]
