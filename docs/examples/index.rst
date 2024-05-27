@@ -1,11 +1,16 @@
 Examples
-##########
+########
 
 This guide is here to help you start creating interpolating with BSSP.
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Example Gallery
+   :maxdepth: 2
 
-   tensorspline_api_call
    2D_image_rotation
+   tensorspline_api_call
+
+.. nblinkgallery::
+   :name: rst-link-gallery
+
+   2D_image_rotation
+   tensorspline_api_call

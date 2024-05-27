@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 from bssp.interpolate.tensorspline import TensorSpline
 
+# Section: Data Preparation
 # Data type (need to provide floating numbers, "float64" and "float32" are typical)
 dtype = "float32"
 
@@ -25,13 +26,11 @@ prng = np.random.default_rng(seed=5250)
 data = prng.standard_normal(size=tuple(c.size for c in coordinates))
 data = np.ascontiguousarray(data, dtype=dtype)
 
+# Section: Tensor Spline Setup
 # Tensor spline bases
-#  Note: Need to provide one basis per data dimension. If a single one is provided,
-#  it will be applied to all dimensions
 bases = "bspline3"  # same basis applied to all dimensions
 
 # Tensor spline signal extension modes (sometimes referred to as boundary condition)
-#  Note: Similar strategy as for bases.
 modes = "mirror"  # same mode applied to all dimensions
 
 # Create tensor spline
@@ -39,6 +38,7 @@ tensor_spline = TensorSpline(
     data=data, coordinates=coordinates, bases=bases, modes=modes
 )
 
+# Section: Evaluation Coordinates
 # Create evaluation coordinates (extended and oversampled in this case)
 dx = (xx[-1] - xx[0]) / (nx - 1)
 dy = (yy[-1] - yy[0]) / (ny - 1)
@@ -48,24 +48,23 @@ py = pad_fct * ny * dy
 eval_xx = np.linspace(xx[0] - px, xx[-1] + px, 100 * nx)
 eval_yy = np.linspace(yy[0] - py, yy[-1] + py, 100 * ny)
 
+# Section: Standard Evaluation
 # Standard evaluation
-#   Note: coordinates are passed as a "grid", a sequence of regularly spaced axes.
 eval_coords = eval_xx, eval_yy
 data_eval = tensor_spline(coordinates=eval_coords)
 
 # Meshgrid evaluation (not the default choice but could be useful in some cases)
 eval_coords_mg = np.meshgrid(*eval_coords, indexing="ij")
 data_eval_mg = tensor_spline(coordinates=eval_coords_mg, grid=False)
-#   We can test that both evaluation strategy gives the same values
 np.testing.assert_equal(data_eval, data_eval_mg)
 
+# Section: Points Evaluation
 # We can also pass a list of points directly (i.e., not as a grid)
-#   Note: here we just reshape the meshgrid as a list of evaluation coordinates
 eval_coords_pts = np.reshape(eval_coords_mg, newshape=(2, -1))
 data_eval_pts = tensor_spline(coordinates=eval_coords_pts, grid=False)
-#   We can test that it again results in the same evaluation (after reshaping)
 np.testing.assert_equal(data_eval, np.reshape(data_eval_pts, data_eval_mg.shape))
 
+# Section: Visualization
 # Figure
 fig: plt.Figure
 ax: plt.Axes
