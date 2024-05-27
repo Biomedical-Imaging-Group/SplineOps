@@ -1,12 +1,12 @@
-Tensor Spline API Call
-######################
+2D Image Rotation
+##################
 
 Example of using the TensorSpline API.
 
 This example demonstrates how to create a basic interpolation using the
 TensorSpline API.
 
-.. literalinclude:: ../../examples/tensorspline_api_call.py
+.. literalinclude:: ../../examples/image_rotation_2D.py
    :language: python
    :linenos:
 
@@ -22,5 +22,5 @@ The following code executes the example script and generates the plots:
    import sys
    import os
    sys.path.insert(0, os.path.abspath('../../examples'))
-   from tensorspline_api_call import main
+   from image_rotation_2D import main
    main()
