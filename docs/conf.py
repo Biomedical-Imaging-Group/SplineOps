@@ -39,20 +39,18 @@ html_theme_options = {
     "navbar_start": ["navbar-logo"],
     "navbar_center": ["navbar-nav"],
     "navbar_end": ["theme-switcher", "navbar-icon-links"],
-    "external_links": [
-        {"name": "GitHub", "url": "https://github.com/BIGlab/bssp"},
-        {"name": "PyPI", "url": "https://pypi.org/project/bssp/"},
-    ],
     "icon_links": [
         {
-            "name": "GitHub",
+            "name": "",
             "url": "https://github.com/BIGlab/bssp",
             "icon": "fa-brands fa-github",
+            "attributes": {"title": "GitHub"},
         },
         {
-            "name": "PyPI",
+            "name": "",
             "url": "https://pypi.org/project/bssp/",
             "icon": "fa-brands fa-python",
+            "attributes": {"title": "PyPI"},
         },
     ],
     "use_edit_page_button": True,
