@@ -7,23 +7,23 @@ API Reference
 
    core/index
 
-In this section, you can learn more about how PyVista wraps different VTK mesh
-types and how you can leverage powerful 3D plotting and mesh analysis tools.
-Highlights of the API include:
+In this section, you can learn more about how the BSSP library enables 
+multidimensional data interpolation using tensor splines. Highlights of 
+the API include:
 
-* Pythonic interface to VTK's Python bindings
-* Filtering/plotting tools built for interactivity
-* Direct access to common VTK filters
-* Intuitive plotting routines with similar syntax
-
+* Advanced tensor spline interpolation for multidimensional data
+* Flexible specification of spline bases and extension modes
+* Robust validation of input data and coordinates
+* Efficient computation and evaluation of interpolation coefficients
+* Comprehensive and user-friendly interface for interpolation tasks
 
 .. card:: Core API
    :link: core-api-index
    :link-type: ref
-   :class-title: pyvista-card-title
+   :class-title: bssp-card-title
 
-   Learn more about PyVista's different mesh types and direct access to common
-   VTK filters.
+   Learn more about BSSP's tensor spline model and its capabilities for 
+   multidimensional data interpolation.
 
 
 Indices and tables

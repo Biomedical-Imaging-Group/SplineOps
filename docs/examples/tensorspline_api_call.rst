@@ -1,10 +1,9 @@
 Tensor Spline API Call
 ######################
 
-Example of using the TensorSpline API.
-
-This example demonstrates how to create a basic interpolation using the
-TensorSpline API.
+Below is an example of using `TensorSpline` to interpolate multidimensional data. 
+This example demonstrates setting up the tensor spline, creating evaluation coordinates, 
+and generating plots for both the original and interpolated data.
 
 .. literalinclude:: ../../examples/tensorspline_api_call.py
    :language: python

@@ -1,9 +1,10 @@
-.sphinx-codeautolink-a{
+/* Existing custom styles */
+.sphinx-codeautolink-a {
   border-bottom-color: rgb(0, 0, 0);
   border-bottom-style: dotted;
   border-bottom-width: 1px;
 }
-.sphinx-codeautolink-a:hover{
+.sphinx-codeautolink-a:hover {
   color: rgb(139, 179, 255);  /* Lighter blue for hover effect */
 }
 
@@ -12,7 +13,7 @@
 }
 
 .navbar-brand {
-display: inline-block !important;
+  display: inline-block !important;
 }
 
 /* -------------------- THEME OVERRIDES -------------------- */
@@ -45,19 +46,17 @@ html[data-theme="dark"] {
 }
 
 /* Titles */
-
 h1 {
-    background: linear-gradient(to right, var(--pst-color-primary), rgb(71, 188, 245));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
+  background: linear-gradient(to right, var(--pst-color-primary), rgb(71, 188, 245));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 }
 h2 {
-background: linear-gradient(to right, var(--pst-color-primary), rgb(71, 188, 245));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
+  background: linear-gradient(to right, var(--pst-color-primary), rgb(71, 188, 245));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-
 h2 code {
   -webkit-background-clip: initial;
   -webkit-text-fill-color: initial;
@@ -65,8 +64,8 @@ h2 code {
 }
 
 .navbar-icon-links img.icon-link-image {
-    border-radius: 0rem;
-    height: 2em;
+  border-radius: 0rem;
+  height: 2em;
 }
 
 /* -------------------- HOMEPAGE -------------------- */
@@ -163,7 +162,7 @@ h2 code {
   border: 0px;
   background-color: transparent;
 }
-.example-plot-download a.download:hover  { /* Override defaults for hover */
+.example-plot-download a.download:hover { /* Override defaults for hover */
   color: var(--pst-color-primary);
 }
 
@@ -176,4 +175,10 @@ h2 code {
 .toctree-wrapper a:hover {
   text-decoration: none;  /* No underline */
   color: var(--pst-color-primary);
+}
+
+/* -------------------- JUSTIFY TEXT -------------------- */
+
+p {
+  text-align: justify;
 }
