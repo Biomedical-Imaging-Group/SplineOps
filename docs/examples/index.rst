@@ -8,6 +8,7 @@ This guide is here to help you start creating interpolating with BSSP.
 
    tensorspline_api_call
    image_rotation_2D
+   gpu_interoperability_using_cupy
 
 Examples Gallery
 ================
@@ -22,3 +23,6 @@ Examples Gallery
    * - .. image:: ../_static/thumbnail_image_rotation_2D.png
          :width: 150px
      - :doc:`image_rotation_2D`
+   * - .. image:: ../_static/thumbnail_image_rotation_2D.png
+      :width: 150px
+     - :doc:`gpu_interoperability_using_cupy`
