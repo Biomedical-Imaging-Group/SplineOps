@@ -1,61 +1,77 @@
-"""
-Example of using the TensorSpline API.
-
-This example demonstrates how to create a basic interpolation using the
-TensorSpline API.
-"""
-
 #!/usr/bin/env python3
 import numpy as np
 import cupy as cp
-import cupyx.profiler
-from scipy import ndimage
 import matplotlib.pyplot as plt
 import time
+from scipy import ndimage, datasets
 
 from bssp.interpolate.tensorspline import TensorSpline
 
 
-def generate_artificial_image(size):
-    """
-    Generate an artificial image with uniform noise and blur it.
-    """
-    image = np.random.uniform(low=0, high=255, size=(size, size)).astype(np.float32)
-    blurred_image = ndimage.gaussian_filter(image, sigma=3)
-    blurred_image = blurred_image.astype(np.float32)
-    return blurred_image
-
-
 def calculate_inscribed_rectangle_bounds_from_image(image):
     """
-    Calculate the bounds for the largest rectangle that can be inscribed within a circle,
-    which itself is inscribed within the original image.
+    Calculate the bounds for the largest rectangle that can be inscribed
+    within a circle, which itself is inscribed within the original image,
+    based on the image array directly.
+
+    The rectangle and the circle are centered within the original image.
+
+    Parameters:
+    - image: The input image as a 2D or 3D numpy array.
+
+    Returns:
+    - A tuple (x_min, y_min, x_max, y_max) representing the bounds for cropping.
     """
+    # Extract image dimensions
     height, width = image.shape[:2]
+
+    # Calculate the radius of the inscribed circle
     radius = min(width, height) / 2
+
+    # The side length of the square (largest inscribed rectangle in a circle)
     side_length = radius * np.sqrt(2)
+
+    # Calculate the center of the image
     cx, cy = width / 2, height / 2
+
+    # Calculate the bounds of the largest inscribed rectangle
     x_min = int(cx - side_length / 2)
     y_min = int(cy - side_length / 2)
     x_max = int(cx + side_length / 2)
     y_max = int(cy + side_length / 2)
+
     return np.array([x_min, y_min, x_max, y_max])
 
 
 def crop_image_to_bounds(image, bounds):
     """
     Crop an image to the specified bounds.
+
+    Parameters:
+    - image: The input image as a 2D numpy array.
+    - bounds: An array of (x_min, y_min, x_max, y_max) defining the crop bounds,
+              where these values are absolute pixel coordinates in the image.
+
+    Returns:
+    - Cropped image as a 2D numpy array.
     """
     x_min, y_min, x_max, y_max = bounds
     return image[y_min:y_max, x_min:x_max]
 
 
-def calculate_snr(original, processed):
+def calculate_snr(original, modified):
     """
-    Compute the Signal-to-Noise Ratio (SNR) between the original and processed images.
+    Compute the Signal-to-Noise Ratio (SNR) between the original and modified images.
+
+    Parameters:
+    - original: The original image as a 2D numpy array.
+    - modified: The modified (rotated) image as a 2D numpy array.
+
+    Returns:
+    - SNR value as a float.
     """
     original_normalized = original / 255.0 if original.max() > 1 else original
-    processed_normalized = processed / 255.0 if processed.max() > 1 else processed
+    processed_normalized = modified / 255.0 if modified.max() > 1 else modified
     noise = original_normalized - processed_normalized
     mean_signal = np.mean(original_normalized)
     variance_noise = np.var(noise)
@@ -64,9 +80,34 @@ def calculate_snr(original, processed):
     return snr
 
 
+def calculate_mse(original, modified):
+    """
+    Compute the Mean Squared Error (MSE) between the original and modified images.
+
+    Parameters:
+    - original: The original image as a 2D numpy array.
+    - modified: The modified (rotated) image as a 2D numpy array.
+
+    Returns:
+    - MSE value as a float.
+    """
+    mse = np.mean((original - modified) ** 2)
+    return mse
+
+
 def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1):
     """
     Rotate an image by a specified angle using the BSSP library's TensorSpline method and crop the result.
+
+    Parameters:
+    - image: The input image as a 2D numpy array.
+    - angle: The rotation angle in degrees.
+    - order: The order of the spline (0-7).
+    - mode: The mode for handling boundaries (default is "zero").
+    - iterations: The number of iterations to apply the rotation.
+
+    Returns:
+    - Rotated image as a 2D numpy array.
     """
     dtype = image.dtype
     ny, nx = image.shape
@@ -88,7 +129,7 @@ def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1)
         angle_rad = np.radians(-angle)
         cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)
         original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0
-        oy, ox = np.ogrid[0:ny, 0:nx]
+        oy, ox = cp.ogrid[0:ny, 0:nx]
         ox = ox - original_center_x
         oy = oy - original_center_y
 
@@ -99,16 +140,25 @@ def rotate_image_and_crop_bssp(image, angle, order=3, mode="zero", iterations=1)
             nx_coords.flatten()
         )
         interpolated_values_cp = tensor_spline(coordinates=eval_coords_cp, grid=False)
-        interpolated_values_np = interpolated_values_cp.get()
-        rotated_image = interpolated_values_np.reshape(ny, nx)
-        cp.get_default_memory_pool().free_all_blocks()
+        rotated_image_cp = interpolated_values_cp.reshape(ny, nx)
 
+    rotated_image = rotated_image_cp.get()
+    cp.get_default_memory_pool().free_all_blocks()
     return rotated_image
 
 
-def rotate_image_and_crop_scipy(image, angle, order=3, iterations=1):
+def rotate_image_and_crop_scipy(image, angle, order=3, iterations=5):
     """
     Rotate an image by a specified angle using SciPy's ndimage.rotate function and crop the result.
+
+    Parameters:
+    - image: The input image as a 2D numpy array.
+    - angle: The rotation angle in degrees.
+    - order: The order of the spline (0-5).
+    - iterations: The number of iterations to apply the rotation.
+
+    Returns:
+    - Rotated image as a 2D numpy array.
     """
     rotated_image = image.copy()
     for _ in range(iterations):
@@ -118,79 +168,79 @@ def rotate_image_and_crop_scipy(image, angle, order=3, iterations=1):
     return rotated_image
 
 
-def benchmark_and_display_rotation(size, angle, order, iterations):
+def benchmark_and_display_rotation(image, angle, order, iterations):
     """
     Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.
-    """
-    image = generate_artificial_image(size)
-    rotated_bssp = rotate_image_and_crop_bssp(
-        image, angle, order=order, iterations=iterations
-    )
-    rotated_scipy = rotate_image_and_crop_scipy(
-        image, angle, order=order, iterations=iterations
-    )
-    snr_bssp = calculate_snr(image, rotated_bssp)
-    snr_scipy = calculate_snr(image, rotated_scipy)
 
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-    axs[0].imshow(image, cmap="gray")
-    axs[0].set_title("Original Image")
-    axs[1].imshow(rotated_bssp, cmap="gray")
-    axs[1].set_title(f"BSSP Rotated Image\nSNR: {snr_bssp:.2f} dB")
-    axs[2].imshow(rotated_scipy, cmap="gray")
-    axs[2].set_title(f"SciPy Rotated Image\nSNR: {snr_scipy:.2f} dB")
-    for ax in axs:
-        ax.axis("off")
+    Parameters:
+    - image: The input image as a 2D numpy array.
+    - angle: The rotation angle in degrees.
+    - order: The order of the spline (0-7).
+    - iterations: The number of iterations to apply the rotation.
+    """
+    start_time_custom = time.time()
+    custom_rotated_and_cropped_bssp = rotate_image_and_crop_bssp(
+        image, angle, order=order, mode="zero", iterations=iterations
+    )
+    time_custom = time.time() - start_time_custom
+
+    start_time_scipy = time.time()
+    scipy_rotated_and_cropped = rotate_image_and_crop_scipy(
+        image, angle, order=order, iterations=iterations
+    )
+    time_scipy = time.time() - start_time_scipy
+
+    bounds = calculate_inscribed_rectangle_bounds_from_image(image)
+    image_cropped = crop_image_to_bounds(image, bounds)
+    custom_rotated_and_cropped_bssp = crop_image_to_bounds(
+        custom_rotated_and_cropped_bssp, bounds
+    )
+    scipy_rotated_and_cropped = crop_image_to_bounds(scipy_rotated_and_cropped, bounds)
+
+    snr_bssp = calculate_snr(image_cropped, custom_rotated_and_cropped_bssp)
+    snr_scipy = calculate_snr(image_cropped, scipy_rotated_and_cropped)
+    mse_bssp = calculate_mse(image_cropped, custom_rotated_and_cropped_bssp)
+    mse_scipy = calculate_mse(image_cropped, scipy_rotated_and_cropped)
+
+    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
+    axes[0].imshow(image_cropped, cmap="gray")
+    axes[0].set_title("Original Image")
+    axes[1].imshow(custom_rotated_and_cropped_bssp, cmap="gray")
+    axes[1].set_title(
+        f"BSSP Rotated\nSNR: {snr_bssp:.2f}dB, MSE: {mse_bssp:.2e}\nAngle: {angle}°, Iter: {iterations}\nOrder: {order}, Time: {time_custom:.2f}s"
+    )
+    axes[2].imshow(scipy_rotated_and_cropped, cmap="gray")
+    axes[2].set_title(
+        f"SciPy Rotated\nSNR: {snr_scipy:.2f}dB, MSE: {mse_scipy:.2e}\nAngle: {angle}°, Iter: {iterations}\nOrder: {order}, Time: {time_scipy:.2f}s"
+    )
+
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.80, bottom=0.15)
     plt.show()
 
 
-def benchmark_rotation(size, angle, order, iterations):
-    """
-    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries.
-    """
-    image = generate_artificial_image(size)
-    rotate_image_and_crop_bssp(image, angle=angle, order=order, iterations=1)
-    result_bssp = cupyx.profiler.benchmark(
-        rotate_image_and_crop_bssp,
-        (image, angle, order, "zero", iterations),
-        n_repeat=1,
-    )
-    start_cpu_scipy = time.perf_counter()
-    rotate_image_and_crop_scipy(image, angle=angle, order=order, iterations=iterations)
-    end_cpu_scipy = time.perf_counter()
-    time_scipy = end_cpu_scipy - start_cpu_scipy
-    return size, result_bssp.cpu_times.mean(), time_scipy
-
-
 def main():
-    image_sizes = [10, 50, 100]
-    sizes = []
-    times_bssp = []
-    times_scipy = []
-    angle = 360
+    """
+    Main function to load the image, perform rotations using both BSSP and SciPy methods,
+    and display the results.
+    """
+    # Image size, Rotation angle and iterations and order of spline interpolation
+    size = 1000
+    angle = 72  # 72
+    iterations = 5  # 5
     order = 3
-    iterations = 1
-    for size in image_sizes:
-        size, time_bssp, time_scipy = benchmark_rotation(
-            size, angle=angle, order=order, iterations=iterations
-        )
-        sizes.append(size)
-        times_bssp.append(time_bssp)
-        times_scipy.append(time_scipy)
-    plt.figure(figsize=(10, 6))
-    plt.plot(sizes, times_bssp, "-o", label="BSSP", color="blue")
-    plt.plot(sizes, times_scipy, "-o", label="SciPy", color="red")
-    plt.xlabel("Image Size (pixels)")
-    plt.ylabel("Time (seconds)")
-    plt.title("Benchmark: BSSP vs SciPy Image Rotation Time by Image Size")
-    plt.legend()
-    plt.grid(True)
-    plt.xscale("log")
-    plt.yscale("log")
-    plt.show(block=False)
-    benchmark_and_display_rotation(
-        size=100, angle=angle, order=order, iterations=iterations
+
+    # Load and resize the ascent image
+    image = datasets.ascent()
+    image_resized = ndimage.zoom(
+        image, (size / image.shape[0], size / image.shape[1]), order=order
     )
+
+    # Convert to float32
+    image_resized = image_resized.astype(np.float32)
+
+    # Benchmark and display rotation results
+    benchmark_and_display_rotation(image_resized, angle, order, iterations)
 
 
 if __name__ == "__main__":
