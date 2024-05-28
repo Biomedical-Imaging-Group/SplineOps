@@ -23,6 +23,6 @@ Examples Gallery
    * - .. image:: ../_static/thumbnail_image_rotation_2D.png
          :width: 150px
      - :doc:`image_rotation_2D`
-   * - .. image:: ../_static/thumbnail_image_rotation_2D.png
-      :width: 150px
+   * - .. image:: ../_static/thumbnail_gpu_interoperability_using_cupy.png
+         :width: 150px
      - :doc:`gpu_interoperability_using_cupy`
