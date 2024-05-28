@@ -1,16 +1,37 @@
 Tensor Spline API Call
 ######################
 
-Below is an example of using `TensorSpline` to interpolate multidimensional data. 
-This example demonstrates setting up the tensor spline, creating evaluation coordinates, 
-and generating plots for both the original and interpolated data.
+Example of using the TensorSpline API.
+
+This example demonstrates how to create a basic interpolation using the TensorSpline API to interpolate multidimensional data.
+
+Overview
+========
+
+This example script performs the following tasks:
+
+1. Prepares random data samples and corresponding coordinates.
+2. Sets up the TensorSpline with the specified bases and modes.
+3. Creates evaluation coordinates extended and oversampled.
+4. Performs standard evaluation on a grid of coordinates.
+5. Evaluates using a meshgrid and compares the results with the standard evaluation.
+6. Evaluates the tensor spline at a list of points and verifies the results.
+7. Visualizes the original data samples and the interpolated data.
+
+The main functions include:
+
+- `main`:
+  Demonstrates the usage of the TensorSpline API, including data preparation, tensor spline setup, evaluation, and visualization.
+
+The code
+========
 
 .. literalinclude:: ../../examples/tensorspline_api_call.py
    :language: python
    :linenos:
 
-Executing the Example
-=====================
+Executing the code
+==================
 
 The following code executes the example script and generates the plots:
 
