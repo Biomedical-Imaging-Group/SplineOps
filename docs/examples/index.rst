@@ -1,7 +1,7 @@
 Examples
 ########
 
-This guide is here to help you start creating interpolating with BSSP.
+These examples will help you to start using the BSSP library.
 
 .. toctree::
    :maxdepth: 1
