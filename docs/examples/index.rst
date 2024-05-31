@@ -1,9 +1,10 @@
 Example Gallery
 ###############
 
-.. nblinkgallery::
-    :name: rst-link-gallery
+.. toctree::
+   :maxdepth: 1
+   :caption: Example Gallery
 
-    tensorspline_api_call
-    image_rotation_2D
-    gpu_interoperability_using_cupy
+   tensorspline_api_call
+   image_rotation_2D
+   gpu_interoperability_using_cupy

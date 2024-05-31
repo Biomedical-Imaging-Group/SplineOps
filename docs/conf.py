@@ -13,10 +13,10 @@ author = "BIG lab"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
+    "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "sphinx.ext.autosummary",
     "sphinx_design",
     "sphinx_togglebutton",
     "sphinx.ext.intersphinx",
@@ -24,7 +24,6 @@ extensions = [
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "matplotlib.sphinxext.plot_directive",
-    "nbsphinx",
 ]
 
 autosummary_generate = True
