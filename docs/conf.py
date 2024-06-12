@@ -24,6 +24,7 @@ extensions = [
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "matplotlib.sphinxext.plot_directive",
+    "jupyter_sphinx",
 ]
 
 autosummary_generate = True
