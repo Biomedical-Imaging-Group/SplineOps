@@ -1,7 +1,7 @@
 Tensorspline
 ============
 
-.. automodule:: bssp.interpolate.tensorspline
+.. automodule:: splineops.interpolate.tensorspline
    :members:
    :undoc-members:
    :show-inheritance:

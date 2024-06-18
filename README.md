@@ -1,4 +1,4 @@
-# splineops: spline signal processing
+# SplineOps: spline signal processing
 
 ## Description
 
