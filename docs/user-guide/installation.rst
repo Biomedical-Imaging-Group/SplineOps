@@ -15,11 +15,11 @@ Minimal requirements:
 
     mamba install numpy scipy
 
-Simply install bssp from its wheel using pip. **IMPORTANT**: Not yet uploaded on pypi or anaconda/mamba. A wheel is needed and can be obtained from the source (see Packaging below).
+Simply install splineops from its wheel using pip. **IMPORTANT**: Not yet uploaded on pypi or anaconda/mamba. A wheel is needed and can be obtained from the source (see Packaging below).
 
 .. code-block:: bash
 
-    pip install bssp
+    pip install splineops
 
 To run the examples, matplotlib will also be required.
 

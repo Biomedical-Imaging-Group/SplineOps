@@ -1,8 +1,8 @@
-.. bssp documentation master file, created by sphinx-quickstart.
+.. splineops documentation master file, created by sphinx-quickstart.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-BSSP - B-Spline Signal Processing
+SplineOps - Spline Signal Processing
 ===================================
 
 .. raw:: html
@@ -10,14 +10,14 @@ BSSP - B-Spline Signal Processing
     <div id="hero" style="display: flex; align-items: center; justify-content: space-between;">
         <div id="hero-left" style="flex: 1; margin-right: 20px;">
             <p>
-                <strong>BSSP (B-Spline Signal Processing)</strong> is an innovative open-source software library dedicated to high-performance signal processing with B-splines. Designed to empower researchers, engineers, and data scientists, BSSP excels in processing large datasets efficiently, supporting both CPU and GPU computations across a wide spectrum of applications. From data smoothing to complex multidimensional data interpolation, BSSP offers precision and speed for your computational needs.
+                <strong>SplineOps (Spline Signal Processing)</strong> is an innovative open-source software library dedicated to high-performance signal processing with splines, specially B-splines. Designed to empower researchers, engineers, and data scientists, SplineOps excels in processing large datasets efficiently, supporting both CPU and GPU computations across a wide spectrum of applications. From data smoothing to complex multidimensional data interpolation, SplineOps offers precision and speed for your computational needs.
             </p>
             <p>
-                By embracing modern computing architectures and seamless integration with the PyData ecosystem, BSSP enhances computational pipelines, enabling users to focus on forward-thinking innovation and data exploration.
+                By embracing modern computing architectures and seamless integration with the PyData ecosystem, SplineOps enhances computational pipelines, enabling users to focus on forward-thinking innovation and data exploration.
             </p>
         </div>
         <div id="hero-right" style="flex: 1;">
-            <img src="_static/main_feature_image.png" alt="Main Feature of BSSP" style="max-width: 100%; height: auto;">
+            <img src="_static/main_feature_image.png" alt="Main Feature of SplineOps" style="max-width: 100%; height: auto;">
         </div>
     </div>
 
@@ -77,5 +77,5 @@ Key Features & Capabilities
 
             <p style="text-align: center;">
             <strong> Scalability and Extensibility </strong> <br/>
-            Designed with scalability in mind, BSSP is straightforward to use and can be effortlessly expanded to incorporate new functionalities tailored to specific applications.
+            Designed with scalability in mind, SplineOps is straightforward to use and can be effortlessly expanded to incorporate new functionalities tailored to specific applications.
             </p>

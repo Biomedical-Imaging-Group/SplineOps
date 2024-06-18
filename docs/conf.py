@@ -7,7 +7,7 @@ import os
 sys.path.insert(0, os.path.abspath("../src"))
 
 # -- Project information -----------------------------------------------------
-project = "bssp"
+project = "splineops"
 copyright = f"{dt.datetime.now().year}, BIG lab"
 author = "BIG lab"
 
@@ -42,13 +42,13 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "",
-            "url": "https://github.com/BIGlab/bssp",
+            "url": "https://github.com/Biomedical-Imaging-Group/splineops",
             "icon": "fa-brands fa-github",
             "attributes": {"title": "GitHub"},
         },
         {
             "name": "",
-            "url": "https://pypi.org/project/bssp/",
+            "url": "https://pypi.org/project/splineops/",
             "icon": "fa-brands fa-python",
             "attributes": {"title": "PyPI"},
         },
@@ -57,8 +57,8 @@ html_theme_options = {
 }
 
 html_context = {
-    "github_user": "BIGlab",  # Replace with your GitHub username or organization
-    "github_repo": "bssp",  # Replace with your repository name
+    "github_user": "Biomedical-Imaging-Group",  # Replace with your GitHub username or organization
+    "github_repo": "splineops",  # Replace with your repository name
     "github_version": "main",  # Replace with your branch name
     "doc_path": "docs",  # Path in the repo to your docs root, e.g., "source/docs"
 }

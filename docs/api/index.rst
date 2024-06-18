@@ -20,9 +20,9 @@ the API include:
 .. card:: Core API
    :link: core-api-index
    :link-type: ref
-   :class-title: bssp-card-title
+   :class-title: splineops-card-title
 
-   Learn more about BSSP's tensor spline model and its capabilities for 
+   Learn more about SplineOps tensor spline model and its capabilities for 
    multidimensional data interpolation.
 
 
