@@ -356,35 +356,9 @@ document.write(`
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[3], line 2</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># Load and resize the ascent image</span>
-<span class="ansi-green-fg">----&gt; 2</span> image <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">datasets</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">ascent</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> size <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">500</span>  <span style="color: rgb(95,135,135)"># Resize image to 500x500 for faster computation</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> order <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">3</span>
-
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/scipy/datasets/_fetchers.py:71</span>, in <span class="ansi-cyan-fg">ascent</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pickle</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span> <span style="color: rgb(95,135,135)"># The file will be downloaded automatically the first time this is run,</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span> <span style="color: rgb(95,135,135)"># returning the path to the downloaded file. Afterwards, Pooch finds</span>
-<span class="ansi-green-intense-fg ansi-bold">     70</span> <span style="color: rgb(95,135,135)"># it in the local cache and doesn't repeat the download.</span>
-<span class="ansi-green-fg">---&gt; 71</span> fname <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">fetch_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">ascent.dat</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     72</span> <span style="color: rgb(95,135,135)"># Now we just need to load it with our standard Python tools.</span>
-<span class="ansi-green-intense-fg ansi-bold">     73</span> <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span style="color: rgb(0,135,0)">open</span>(fname, <span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">rb</span><span style="color: rgb(175,0,0)">'</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> f:
-
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/scipy/datasets/_fetchers.py:27</span>, in <span class="ansi-cyan-fg">fetch_data</span><span class="ansi-blue-fg">(dataset_name, data_fetcher)</span>
-<span class="ansi-green-intense-fg ansi-bold">     25</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">fetch_data</span>(dataset_name, data_fetcher<span style="color: rgb(98,98,98)">=</span>data_fetcher):
-<span class="ansi-green-intense-fg ansi-bold">     26</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> data_fetcher <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
-<span class="ansi-green-fg">---&gt; 27</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(<span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">Missing optional dependency </span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">pooch</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)"> required </span><span style="color: rgb(175,0,0)">"</span>
-<span class="ansi-green-intense-fg ansi-bold">     28</span>                           <span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">for scipy.datasets module. Please use pip or </span><span style="color: rgb(175,0,0)">"</span>
-<span class="ansi-green-intense-fg ansi-bold">     29</span>                           <span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">conda to install </span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">pooch</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">.</span><span style="color: rgb(175,0,0)">"</span>)
-<span class="ansi-green-intense-fg ansi-bold">     30</span>     <span style="color: rgb(95,135,135)"># The "fetch" method returns the full path to the downloaded data file.</span>
-<span class="ansi-green-intense-fg ansi-bold">     31</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> data_fetcher<span style="color: rgb(98,98,98)">.</span>fetch(dataset_name)
-
-<span class="ansi-red-fg">ImportError</span>: Missing optional dependency 'pooch' required for scipy.datasets module. Please use pip or conda to install 'pooch'.
+Downloading file 'ascent.dat' from 'https://raw.githubusercontent.com/scipy/dataset-ascent/main/ascent.dat' to '/home/runner/.cache/scipy-data'.
 </pre></div></div>
 </div>
 </section>
@@ -417,29 +391,100 @@ File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/pyt
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[4], line 4</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> fig, ax <span style="color: rgb(98,98,98)">=</span> plt<span style="color: rgb(98,98,98)">.</span>subplots()
-<span class="ansi-green-intense-fg ansi-bold">      3</span> ax<span style="color: rgb(98,98,98)">.</span>axis(<span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">off</span><span style="color: rgb(175,0,0)">'</span>)
-<span class="ansi-green-fg">----&gt; 4</span> original_image <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">image_resized</span><span style="color: rgb(98,98,98)">.</span>copy()
-<span class="ansi-green-intense-fg ansi-bold">      5</span> image_rotated <span style="color: rgb(98,98,98)">=</span> original_image<span style="color: rgb(98,98,98)">.</span>copy()
-<span class="ansi-green-intense-fg ansi-bold">      6</span> image_plot <span style="color: rgb(98,98,98)">=</span> ax<span style="color: rgb(98,98,98)">.</span>imshow(image_rotated, cmap<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">gray</span><span style="color: rgb(175,0,0)">'</span>)
+<span class="ansi-red-fg">CUDARuntimeError</span>                          Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[4], line 19</span>
+<span class="ansi-green-intense-fg ansi-bold">     17</span> ani <span style="color: rgb(98,98,98)">=</span> animation<span style="color: rgb(98,98,98)">.</span>FuncAnimation(fig, animate, frames<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">73</span>, interval<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">50</span>, blit<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+<span class="ansi-green-intense-fg ansi-bold">     18</span> plt<span style="color: rgb(98,98,98)">.</span>close(fig)  <span style="color: rgb(95,135,135)"># Prevents the initial still image from displaying</span>
+<span class="ansi-green-fg">---&gt; 19</span> display(HTML(<span class="ansi-yellow-bg">ani</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">to_jshtml</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>))
 
-<span class="ansi-red-fg">NameError</span>: name 'image_resized' is not defined
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/matplotlib/animation.py:1353</span>, in <span class="ansi-cyan-fg">Animation.to_jshtml</span><span class="ansi-blue-fg">(self, fps, embed_frames, default_mode)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1349</span>         path <span style="color: rgb(98,98,98)">=</span> Path(tmpdir, <span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">temp.html</span><span style="color: rgb(175,0,0)">"</span>)
+<span class="ansi-green-intense-fg ansi-bold">   1350</span>         writer <span style="color: rgb(98,98,98)">=</span> HTMLWriter(fps<span style="color: rgb(98,98,98)">=</span>fps,
+<span class="ansi-green-intense-fg ansi-bold">   1351</span>                             embed_frames<span style="color: rgb(98,98,98)">=</span>embed_frames,
+<span class="ansi-green-intense-fg ansi-bold">   1352</span>                             default_mode<span style="color: rgb(98,98,98)">=</span>default_mode)
+<span class="ansi-green-fg">-&gt; 1353</span>         <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">save</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">str</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">path</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">writer</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">writer</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1354</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_html_representation <span style="color: rgb(98,98,98)">=</span> path<span style="color: rgb(98,98,98)">.</span>read_text()
+<span class="ansi-green-intense-fg ansi-bold">   1356</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_html_representation
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/matplotlib/animation.py:1105</span>, in <span class="ansi-cyan-fg">Animation.save</span><span class="ansi-blue-fg">(self, filename, writer, fps, dpi, codec, bitrate, extra_args, metadata, extra_anim, savefig_kwargs, progress_callback)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1102</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> data <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">zip</span>(<span style="color: rgb(98,98,98)">*</span>[a<span style="color: rgb(98,98,98)">.</span>new_saved_frame_seq() <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> a <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> all_anim]):
+<span class="ansi-green-intense-fg ansi-bold">   1103</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> anim, d <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">zip</span>(all_anim, data):
+<span class="ansi-green-intense-fg ansi-bold">   1104</span>         <span style="color: rgb(95,135,135)"># TODO: See if turning off blit is really necessary</span>
+<span class="ansi-green-fg">-&gt; 1105</span>         <span class="ansi-yellow-bg">anim</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_draw_next_frame</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">d</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">blit</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1106</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> progress_callback <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-green-intense-fg ansi-bold">   1107</span>             progress_callback(frame_number, total_frames)
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/matplotlib/animation.py:1140</span>, in <span class="ansi-cyan-fg">Animation._draw_next_frame</span><span class="ansi-blue-fg">(self, framedata, blit)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1136</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_draw_next_frame</span>(<span style="color: rgb(0,135,0)">self</span>, framedata, blit):
+<span class="ansi-green-intense-fg ansi-bold">   1137</span>     <span style="color: rgb(95,135,135)"># Breaks down the drawing of the next frame into steps of pre- and</span>
+<span class="ansi-green-intense-fg ansi-bold">   1138</span>     <span style="color: rgb(95,135,135)"># post- draw, as well as the drawing of the frame itself.</span>
+<span class="ansi-green-intense-fg ansi-bold">   1139</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_pre_draw(framedata, blit)
+<span class="ansi-green-fg">-&gt; 1140</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_draw_frame</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">framedata</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1141</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_post_draw(framedata, blit)
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/matplotlib/animation.py:1768</span>, in <span class="ansi-cyan-fg">FuncAnimation._draw_frame</span><span class="ansi-blue-fg">(self, framedata)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1764</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_save_seq <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_save_seq[<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_save_count:]
+<span class="ansi-green-intense-fg ansi-bold">   1766</span> <span style="color: rgb(95,135,135)"># Call the func with framedata and args. If blitting is desired,</span>
+<span class="ansi-green-intense-fg ansi-bold">   1767</span> <span style="color: rgb(95,135,135)"># func needs to return a sequence of any artists that were modified.</span>
+<span class="ansi-green-fg">-&gt; 1768</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_drawn_artists <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_func</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">framedata</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_args</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1770</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_blit:
+<span class="ansi-green-intense-fg ansi-bold">   1772</span>     err <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(215,95,95)">RuntimeError</span>(<span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">The animation function must return a sequence </span><span style="color: rgb(175,0,0)">'</span>
+<span class="ansi-green-intense-fg ansi-bold">   1773</span>                        <span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">of Artist objects.</span><span style="color: rgb(175,0,0)">'</span>)
+
+Cell <span class="ansi-green-fg">In[4], line 12</span>, in <span class="ansi-cyan-fg">animate</span><span class="ansi-blue-fg">(frame)</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-bold" style="color: rgb(0,135,0)">global</span> image_rotated
+<span class="ansi-green-intense-fg ansi-bold">     11</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> frame <span style="color: rgb(98,98,98)">&gt;</span> <span style="color: rgb(98,98,98)">0</span>:
+<span class="ansi-green-fg">---&gt; 12</span>     image_rotated <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">rotate_image_splineops</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">image_rotated</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">5</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg">)</span>  <span style="color: rgb(95,135,135)"># Rotate by 5 degrees each frame</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> image_plot<span style="color: rgb(98,98,98)">.</span>set_data(image_rotated)
+<span class="ansi-green-intense-fg ansi-bold">     14</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> [image_plot]
+
+Cell <span class="ansi-green-fg">In[2], line 20</span>, in <span class="ansi-cyan-fg">rotate_image_splineops</span><span class="ansi-blue-fg">(image, angle, order, mode)</span>
+<span class="ansi-green-intense-fg ansi-bold">     17</span> yy <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>linspace(<span style="color: rgb(98,98,98)">0</span>, ny <span style="color: rgb(98,98,98)">-</span> <span style="color: rgb(98,98,98)">1</span>, ny, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
+<span class="ansi-green-intense-fg ansi-bold">     18</span> data <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>ascontiguousarray(image, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
+<span class="ansi-green-fg">---&gt; 20</span> rotated_image_cp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">cp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">asarray</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     21</span> xx_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(xx)
+<span class="ansi-green-intense-fg ansi-bold">     22</span> yy_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(yy)
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/cupy/_creation/from_data.py:88</span>, in <span class="ansi-cyan-fg">asarray</span><span class="ansi-blue-fg">(a, dtype, order, blocking)</span>
+<span class="ansi-green-intense-fg ansi-bold">     56</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">asarray</span>(a, dtype<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, order<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span style="color: rgb(98,98,98)">*</span>, blocking<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
+<span class="ansi-green-intense-fg ansi-bold">     57</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">"""Converts an object to array.</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>
+<span class="ansi-green-intense-fg ansi-bold">     59</span> <span style="color: rgb(175,0,0)">    This is equivalent to ``array(a, dtype, copy=False, order=order)``.</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">     86</span>
+<span class="ansi-green-intense-fg ansi-bold">     87</span> <span style="color: rgb(175,0,0)">    """</span>
+<span class="ansi-green-fg">---&gt; 88</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">_core</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">a</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dtype</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2383</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2410</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2553</span>, in <span class="ansi-cyan-fg">cupy._core.core._array_default</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:135</span>, in <span class="ansi-cyan-fg">cupy._core.core.ndarray.__new__</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:223</span>, in <span class="ansi-cyan-fg">cupy._core.core._ndarray_base._init</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:738</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.alloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1424</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1444</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/device.pyx:40</span>, in <span class="ansi-cyan-fg">cupy.cuda.device.get_device_id</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:202</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.getDevice</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:146</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.check_status</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">CUDARuntimeError</span>: cudaErrorInsufficientDriver: CUDA driver version is insufficient for CUDA runtime version
 </pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/examples_image_rotation_2D_7_1.png" src="../_images/examples_image_rotation_2D_7_1.png"/>
-</div>
 </div>
 </section>
 </section>
