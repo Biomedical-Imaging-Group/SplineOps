@@ -1,0 +1,260 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# GPU Interoperability using CuPy and Tensor Spline Interpolation\n",
+    "\n",
+    "This notebook demonstrates GPU interoperability using CuPy and tensor spline interpolation. The following steps are performed:\n",
+    "1. Generates random data and coordinates.\n",
+    "2. Creates tensor splines using NumPy and CuPy.\n",
+    "3. Evaluates the splines on a set of coordinates.\n",
+    "4. Computes the absolute difference and mean square error between the NumPy and CuPy evaluations.\n",
+    "5. Plots the results."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import cupy as cp\n",
+    "import matplotlib.pyplot as plt\n",
+    "from splineops.interpolate.tensorspline import TensorSpline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Data type\n",
+    "\n",
+    "Need to provide floating numbers, \"float64\" and \"float32\" are typical."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dtype = \"float32\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create random data samples and corresponding coordinates"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nx, ny = 2, 5\n",
+    "xmin, xmax = -3.1, +1\n",
+    "ymin, ymax = 2, 6.5\n",
+    "xx = np.linspace(xmin, xmax, nx, dtype=dtype)\n",
+    "yy = np.linspace(ymin, ymax, ny, dtype=dtype)\n",
+    "coordinates = xx, yy\n",
+    "prng = np.random.default_rng(seed=5250)\n",
+    "data = prng.standard_normal(size=tuple(c.size for c in coordinates))\n",
+    "data = np.ascontiguousarray(data, dtype=dtype)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Tensor spline bases and modes\n",
+    "\n",
+    "Same basis applied to all dimensions and same mode applied to all dimensions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "bases = \"bspline3\"\n",
+    "modes = \"mirror\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create tensor spline from NumPy data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_np = data\n",
+    "coordinates_np = coordinates\n",
+    "tensor_spline_np = TensorSpline(\n",
+    "    data=data_np, coordinates=coordinates_np, bases=bases, modes=modes\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create tensor spline from CuPy data for GPU computations\n",
+    "\n",
+    "Note: We first need to convert the NumPy data to CuPy."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_cp = cp.asarray(data)\n",
+    "coordinates_cp = cp.asarray(xx), cp.asarray(yy)\n",
+    "tensor_spline_cp = TensorSpline(\n",
+    "    data=data_cp, coordinates=coordinates_cp, bases=bases, modes=modes\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create evaluation coordinates (extended and oversampled in this case)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dx = (xx[-1] - xx[0]) / (nx - 1)\n",
+    "dy = (yy[-1] - yy[0]) / (ny - 1)\n",
+    "pad_fct = 1.1\n",
+    "px = pad_fct * nx * dx\n",
+    "py = pad_fct * ny * dy\n",
+    "eval_xx = np.linspace(xx[0] - px, xx[-1] + px, 100 * nx)\n",
+    "eval_yy = np.linspace(yy[0] - py, yy[-1] + py, 100 * ny)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Evaluate using NumPy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "eval_coords_np = eval_xx, eval_yy\n",
+    "data_eval_np = tensor_spline_np(coordinates=eval_coords_np)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Evaluate using CuPy\n",
+    "\n",
+    "Note: We first need to convert the evaluation coordinates to CuPy."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "eval_coords_cp = cp.asarray(eval_xx), cp.asarray(eval_yy)\n",
+    "data_eval_cp = tensor_spline_cp(coordinates=eval_coords_cp)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Compute difference"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "abs_diff = np.abs(data_eval_cp.get() - data_eval_np)\n",
+    "mse = np.mean((data_eval_cp.get() - data_eval_np) ** 2)\n",
+    "print(f\"Maximum absolute difference: {np.max(abs_diff)}\")\n",
+    "print(f\"Mean square error: {mse}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Plot results"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, axes = plt.subplots(\n",
+    "    nrows=1, ncols=3, sharex=\"all\", sharey=\"all\", layout=\"constrained\"\n",
+    ")\n",
+    "ax = axes[0]\n",
+    "ax.imshow(data_eval_np.T)\n",
+    "ax.set_title(\"NumPy\")\n",
+    "ax = axes[1]\n",
+    "ax.set_title(\"CuPy\")\n",
+    "ax.imshow(data_eval_cp.get().T)\n",
+    "ax = axes[2]\n",
+    "ax.set_title(f\"Absolute difference\\n(MSE: {mse:.2e})\")\n",
+    "ax.imshow(abs_diff.T)\n",
+    "\n",
+    "plt.show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.19"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

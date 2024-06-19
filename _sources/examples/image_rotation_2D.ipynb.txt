@@ -1,0 +1,184 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 2D Image Rotation Animation\n",
+    "\n",
+    "This notebook demonstrates how to create an animation of a 2D image being rotated from 0 to 360 degrees using the Tensor Spline Interpolation, with each rotation performed on top of the last rotated image to observe error accumulation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3dd35a8f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#!/usr/bin/env python3\n",
+    "import numpy as np\n",
+    "import cupy as cp\n",
+    "import matplotlib.pyplot as plt\n",
+    "from scipy import ndimage, datasets\n",
+    "from IPython.display import HTML, display\n",
+    "from matplotlib import animation\n",
+    "\n",
+    "from splineops.interpolate.tensorspline import TensorSpline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ab56fc62",
+   "metadata": {},
+   "source": [
+    "## Helper Functions\n",
+    "\n",
+    "Define the helper functions to rotate an image and create the animation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2978cdca",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def rotate_image_splineops(image, angle, order=3, mode=\"zero\"):\n",
+    "    \"\"\"\n",
+    "    Rotate an image by a specified angle using SplineOps' TensorSpline method.\n",
+    "\n",
+    "    Parameters:\n",
+    "    - image: The input image as a 2D numpy array.\n",
+    "    - angle: The rotation angle in degrees.\n",
+    "    - order: The order of the spline (0-7).\n",
+    "    - mode: The mode for handling boundaries (default is \"zero\").\n",
+    "\n",
+    "    Returns:\n",
+    "    - Rotated image as a 2D numpy array.\n",
+    "    \"\"\"\n",
+    "    dtype = image.dtype\n",
+    "    ny, nx = image.shape\n",
+    "    xx = np.linspace(0, nx - 1, nx, dtype=dtype)\n",
+    "    yy = np.linspace(0, ny - 1, ny, dtype=dtype)\n",
+    "    data = np.ascontiguousarray(image, dtype=dtype)\n",
+    "\n",
+    "    rotated_image_cp = cp.asarray(data)\n",
+    "    xx_cp = cp.asarray(xx)\n",
+    "    yy_cp = cp.asarray(yy)\n",
+    "\n",
+    "    order = max(0, min(order, 7))\n",
+    "    basis = f\"bspline{order}\"\n",
+    "\n",
+    "    tensor_spline = TensorSpline(\n",
+    "        data=rotated_image_cp, coordinates=(yy_cp, xx_cp), bases=basis, modes=mode\n",
+    "    )\n",
+    "    angle_rad = np.radians(-angle)\n",
+    "    cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)\n",
+    "    original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0\n",
+    "    oy, ox = cp.ogrid[0:ny, 0:nx]\n",
+    "    ox = ox - original_center_x\n",
+    "    oy = oy - original_center_y\n",
+    "\n",
+    "    nx_coords = cos_angle * ox + sin_angle * oy + original_center_x\n",
+    "    ny_coords = -sin_angle * ox + cos_angle * oy + original_center_y\n",
+    "\n",
+    "    eval_coords_cp = cp.asarray(ny_coords.flatten()), cp.asarray(nx_coords.flatten())\n",
+    "    interpolated_values_cp = tensor_spline(coordinates=eval_coords_cp, grid=False)\n",
+    "    rotated_image_cp = interpolated_values_cp.reshape(ny, nx)\n",
+    "\n",
+    "    rotated_image = rotated_image_cp.get()\n",
+    "    cp.get_default_memory_pool().free_all_blocks()\n",
+    "    return rotated_image"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "af618cf0",
+   "metadata": {},
+   "source": [
+    "## Load and Preprocess Image\n",
+    "\n",
+    "Load the image and preprocess it for the rotation animation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d44357c2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Load and resize the ascent image\n",
+    "image = datasets.ascent()\n",
+    "size = 500  # Resize image to 500x500 for faster computation\n",
+    "order = 3\n",
+    "image_resized = ndimage.zoom(\n",
+    "    image, (size / image.shape[0], size / image.shape[1]), order=order\n",
+    ")\n",
+    "\n",
+    "# Convert to float32\n",
+    "image_resized = image_resized.astype(np.float32)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "16132ed5",
+   "metadata": {},
+   "source": [
+    "## Create Animation\n",
+    "\n",
+    "Create the animation of the image being rotated from 0 to 360 degrees."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cbdb11dc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create a figure and axis\n",
+    "fig, ax = plt.subplots()\n",
+    "ax.axis('off')\n",
+    "original_image = image_resized.copy()\n",
+    "image_rotated = original_image.copy()\n",
+    "image_plot = ax.imshow(image_rotated, cmap='gray')\n",
+    "\n",
+    "# Animation function\n",
+    "def animate(frame):\n",
+    "    global image_rotated\n",
+    "    if frame > 0:\n",
+    "        image_rotated = rotate_image_splineops(image_rotated, 5, order=order)  # Rotate by 5 degrees each frame\n",
+    "    image_plot.set_data(image_rotated)\n",
+    "    return [image_plot]\n",
+    "\n",
+    "# Create the animation\n",
+    "ani = animation.FuncAnimation(fig, animate, frames=73, interval=50, blit=True)\n",
+    "plt.close(fig)  # Prevents the initial still image from displaying\n",
+    "display(HTML(ani.to_jshtml()))"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.19"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

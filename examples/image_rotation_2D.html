@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+
+<html data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>2D Image Rotation Animation — splineops  documentation</title>
+<script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+<!-- Loaded before other Sphinx assets -->
+<link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet"/>
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet"/>
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet"/>
+<link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="../_static/pygments.css?v=a746c00c" rel="stylesheet" type="text/css"/>
+<link href="../_static/togglebutton.css?v=13237357" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-codeautolink.css?v=125d5c1c" rel="stylesheet" type="text/css"/>
+<link href="../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="../_static/plot_directive.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/jupyter-sphinx.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/thebelab.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=87e54e7c" rel="stylesheet" type="text/css"/>
+<link href="../_static/nbsphinx-code-cells.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/css/custom.css?v=d4e48d81" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" rel="preload"/>
+<link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" rel="preload"/>
+<script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/documentation_options.js?v=5929fcd5"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+<script src="../_static/copybutton.js?v=f281be69"></script>
+<script src="../_static/thebelab-helper.js"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>DOCUMENTATION_OPTIONS.pagename = 'examples/image_rotation_2D';</script>
+<link href="../_static/logo.ico" rel="icon"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="image_rotation_2D_comparison_scipy.html" rel="next" title="Example of doing an image rotation in 2D and comparing against Scipy"/>
+<link href="tensorspline_api_call.html" rel="prev" title="Example of using the TensorSpline API"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+</head>
+<body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode="" data-offset="180">
+<div class="skip-link d-print-none" id="pst-skip-link"><a href="#main-content">Skip to main content</a></div>
+<div id="pst-scroll-pixel-helper"></div>
+<button class="btn rounded-pill" id="pst-back-to-top" type="button">
+<i class="fa-solid fa-arrow-up"></i>Back to top</button>
+<input class="sidebar-toggle" id="pst-primary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+<input class="sidebar-toggle" id="pst-secondary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+<form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search"/>
+<span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+</div>
+<div class="pst-async-banner-revealer d-none">
+<aside aria-label="Version warning" class="d-none d-print-none" id="bd-header-version-warning"></aside>
+</div>
+<header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+<button aria-label="Site navigation" class="sidebar-toggle primary-toggle">
+<span class="fa-solid fa-bars"></span>
+</button>
+<div class="col-lg-3 navbar-header-items__start">
+<div class="navbar-item">
+<a class="navbar-brand logo" href="../index.html">
+<img alt="splineops  documentation - Home" class="logo__image only-light" src="../_static/logo.png"/>
+<script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="splineops  documentation - Home"/>`);</script>
+</a></div>
+</div>
+<div class="col-lg-9 navbar-header-items">
+<div class="me-auto navbar-header-items__center">
+<div class="navbar-item">
+<nav class="navbar-nav">
+<ul class="bd-navbar-elements navbar-nav">
+<li class="nav-item pst-header-nav-item">
+<a class="nav-link nav-internal" href="../user-guide/index.html">
+    User Guide
+  </a>
+</li>
+<li class="nav-item pst-header-nav-item current active">
+<a class="nav-link nav-internal" href="index.html">
+    Example Gallery
+  </a>
+</li>
+<li class="nav-item pst-header-nav-item">
+<a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+</ul>
+</nav></div>
+</div>
+<div class="navbar-header-items__end">
+<div class="navbar-item navbar-persistent--container">
+<script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+</div>
+<div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+<div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+<li class="nav-item">
+<a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/Biomedical-Imaging-Group/splineops" rel="noopener" target="_blank" title="GitHub"><span><i aria-hidden="true" class="fa-brands fa-github fa-lg"></i></span>
+<span class="sr-only"></span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://pypi.org/project/splineops/" rel="noopener" target="_blank" title="PyPI"><span><i aria-hidden="true" class="fa-brands fa-python fa-lg"></i></span>
+<span class="sr-only"></span></a>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="navbar-persistent--mobile">
+<script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+</div>
+<button aria-label="On this page" class="sidebar-toggle secondary-toggle">
+<span class="fa-solid fa-outdent"></span>
+</button>
+</div>
+</header>
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+<div class="bd-sidebar-primary bd-sidebar">
+<div class="sidebar-header-items sidebar-primary__section">
+<div class="sidebar-header-items__center">
+<div class="navbar-item">
+<nav class="navbar-nav">
+<ul class="bd-navbar-elements navbar-nav">
+<li class="nav-item pst-header-nav-item">
+<a class="nav-link nav-internal" href="../user-guide/index.html">
+    User Guide
+  </a>
+</li>
+<li class="nav-item pst-header-nav-item current active">
+<a class="nav-link nav-internal" href="index.html">
+    Example Gallery
+  </a>
+</li>
+<li class="nav-item pst-header-nav-item">
+<a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+</ul>
+</nav></div>
+</div>
+<div class="sidebar-header-items__end">
+<div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+<div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+<li class="nav-item">
+<a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/Biomedical-Imaging-Group/splineops" rel="noopener" target="_blank" title="GitHub"><span><i aria-hidden="true" class="fa-brands fa-github fa-lg"></i></span>
+<span class="sr-only"></span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://pypi.org/project/splineops/" rel="noopener" target="_blank" title="PyPI"><span><i aria-hidden="true" class="fa-brands fa-python fa-lg"></i></span>
+<span class="sr-only"></span></a>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sidebar-primary-items__start sidebar-primary__section">
+<div class="sidebar-primary-item">
+<nav aria-label="Section Navigation" class="bd-docs-nav bd-links">
+<p aria-level="1" class="bd-links__title" role="heading">Section Navigation</p>
+<div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Gallery</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tensorspline_api_call.html">Example of using the TensorSpline API</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2D Image Rotation Animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_rotation_2D_comparison_scipy.html">Example of doing an image rotation in 2D and comparing against Scipy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpu_interoperability_using_cupy.html">GPU Interoperability using CuPy and Tensor Spline Interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_interaction.html">Example of using interactive Python widgets</a></li>
+</ul>
+</div>
+</nav></div>
+</div>
+<div class="sidebar-primary-items__end sidebar-primary__section">
+</div>
+<div id="rtd-footer-container"></div>
+</div>
+<main class="bd-main" id="main-content" role="main">
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item">
+<nav aria-label="Breadcrumb" class="d-print-none">
+<ul class="bd-breadcrumbs">
+<li class="breadcrumb-item breadcrumb-home">
+<a aria-label="Home" class="nav-link" href="../index.html">
+<i class="fa-solid fa-home"></i>
+</a>
+</li>
+<li class="breadcrumb-item"><a class="nav-link" href="index.html">Example Gallery</a></li>
+<li aria-current="page" class="breadcrumb-item active">2D Image...</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article">
+<section id="2D-Image-Rotation-Animation">
+<h1>2D Image Rotation Animation<a class="headerlink" href="#2D-Image-Rotation-Animation" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to create an animation of a 2D image being rotated from 0 to 360 degrees using the Tensor Spline Interpolation, with each rotation performed on top of the last rotated image to observe error accumulation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/index.html#module-numpy" title="numpy"><span class="nn">numpy</span></a> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/pyplot_summary.html#module-matplotlib.pyplot" title="matplotlib.pyplot"><span class="nn">matplotlib.pyplot</span></a> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="scipy"><span class="nn">scipy</span></a> <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/ndimage.html#module-scipy.ndimage" title="scipy.ndimage"><span class="n">ndimage</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/datasets.html#module-scipy.datasets" title="scipy.datasets"><span class="n">datasets</span></a>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
+<span class="kn">from</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/index.html#module-matplotlib" title="matplotlib"><span class="nn">matplotlib</span></a> <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/animation_api.html#module-matplotlib.animation" title="matplotlib.animation"><span class="n">animation</span></a>
+
+<span class="kn">from</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#module-splineops.interpolate.tensorspline" title="splineops.interpolate.tensorspline"><span class="nn">splineops.interpolate.tensorspline</span></a> <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">TensorSpline</span></a>
+</pre></div>
+</div>
+</div>
+<section id="Helper-Functions">
+<h2>Helper Functions<a class="headerlink" href="#Helper-Functions" title="Link to this heading">#</a></h2>
+<p>Define the helper functions to rotate an image and create the animation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rotate_image_splineops</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Rotate an image by a specified angle using SplineOps' TensorSpline method.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    - image: The input image as a 2D numpy array.</span>
+<span class="sd">    - angle: The rotation angle in degrees.</span>
+<span class="sd">    - order: The order of the spline (0-7).</span>
+<span class="sd">    - mode: The mode for handling boundaries (default is "zero").</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - Rotated image as a 2D numpy array.</span>
+<span class="sd">    """</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">xx</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">yy</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.ascontiguousarray.html#numpy.ascontiguousarray" title="numpy.ascontiguousarray"><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span></a><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="n">rotated_image_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">xx_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+    <span class="n">yy_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#max" title="max"><span class="nb">max</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#min" title="min"><span class="nb">min</span></a><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"bspline</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span>
+
+    <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">tensor_spline</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">TensorSpline</span></a><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">rotated_image_cp</span><span class="p">,</span> <span class="n">coordinates</span><span class="o">=</span><span class="p">(</span><span class="n">yy_cp</span><span class="p">,</span> <span class="n">xx_cp</span><span class="p">),</span> <span class="n">bases</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="n">mode</span>
+    <span class="p">)</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.radians.html#numpy.radians" title="numpy.radians"><span class="n">np</span><span class="o">.</span><span class="n">radians</span></a><span class="p">(</span><span class="o">-</span><span class="n">angle</span><span class="p">)</span>
+    <span class="n">cos_angle</span><span class="p">,</span> <span class="n">sin_angle</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.cos.html#numpy.cos" title="numpy.cos"><span class="n">np</span><span class="o">.</span><span class="n">cos</span></a><span class="p">(</span><span class="n">angle_rad</span><span class="p">),</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.sin.html#numpy.sin" title="numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">original_center_x</span><span class="p">,</span> <span class="n">original_center_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">oy</span><span class="p">,</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">ny</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">nx</span><span class="p">]</span>
+    <span class="n">ox</span> <span class="o">=</span> <span class="n">ox</span> <span class="o">-</span> <span class="n">original_center_x</span>
+    <span class="n">oy</span> <span class="o">=</span> <span class="n">oy</span> <span class="o">-</span> <span class="n">original_center_y</span>
+
+    <span class="n">nx_coords</span> <span class="o">=</span> <span class="n">cos_angle</span> <span class="o">*</span> <span class="n">ox</span> <span class="o">+</span> <span class="n">sin_angle</span> <span class="o">*</span> <span class="n">oy</span> <span class="o">+</span> <span class="n">original_center_x</span>
+    <span class="n">ny_coords</span> <span class="o">=</span> <span class="o">-</span><span class="n">sin_angle</span> <span class="o">*</span> <span class="n">ox</span> <span class="o">+</span> <span class="n">cos_angle</span> <span class="o">*</span> <span class="n">oy</span> <span class="o">+</span> <span class="n">original_center_y</span>
+
+    <span class="n">eval_coords_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ny_coords</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nx_coords</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">interpolated_values_cp</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">tensor_spline</span></a><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="n">eval_coords_cp</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rotated_image_cp</span> <span class="o">=</span> <span class="n">interpolated_values_cp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+
+    <span class="n">rotated_image</span> <span class="o">=</span> <span class="n">rotated_image_cp</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">cp</span><span class="o">.</span><span class="n">get_default_memory_pool</span><span class="p">()</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">rotated_image</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Load-and-Preprocess-Image">
+<h2>Load and Preprocess Image<a class="headerlink" href="#Load-and-Preprocess-Image" title="Link to this heading">#</a></h2>
+<p>Load the image and preprocess it for the rotation animation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and resize the ascent image</span>
+<span class="n">image</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.datasets.ascent.html#scipy.datasets.ascent" title="scipy.datasets.ascent"><span class="n">datasets</span><span class="o">.</span><span class="n">ascent</span></a><span class="p">()</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># Resize image to 500x500 for faster computation</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">image_resized</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.zoom.html#scipy.ndimage.zoom" title="scipy.ndimage.zoom"><span class="n">ndimage</span><span class="o">.</span><span class="n">zoom</span></a><span class="p">(</span>
+    <span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span> <span class="o">/</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span>
+<span class="p">)</span>
+
+<span class="c1"># Convert to float32</span>
+<span class="n">image_resized</span> <span class="o">=</span> <span class="n">image_resized</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float32" title="numpy.float32"><span class="n">np</span><span class="o">.</span><span class="n">float32</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[3], line 2</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># Load and resize the ascent image</span>
+<span class="ansi-green-fg">----&gt; 2</span> image <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">datasets</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">ascent</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> size <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">500</span>  <span style="color: rgb(95,135,135)"># Resize image to 500x500 for faster computation</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> order <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">3</span>
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/scipy/datasets/_fetchers.py:71</span>, in <span class="ansi-cyan-fg">ascent</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     66</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">pickle</span>
+<span class="ansi-green-intense-fg ansi-bold">     68</span> <span style="color: rgb(95,135,135)"># The file will be downloaded automatically the first time this is run,</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span> <span style="color: rgb(95,135,135)"># returning the path to the downloaded file. Afterwards, Pooch finds</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span> <span style="color: rgb(95,135,135)"># it in the local cache and doesn't repeat the download.</span>
+<span class="ansi-green-fg">---&gt; 71</span> fname <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">fetch_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">ascent.dat</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     72</span> <span style="color: rgb(95,135,135)"># Now we just need to load it with our standard Python tools.</span>
+<span class="ansi-green-intense-fg ansi-bold">     73</span> <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span style="color: rgb(0,135,0)">open</span>(fname, <span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">rb</span><span style="color: rgb(175,0,0)">'</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> f:
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/scipy/datasets/_fetchers.py:27</span>, in <span class="ansi-cyan-fg">fetch_data</span><span class="ansi-blue-fg">(dataset_name, data_fetcher)</span>
+<span class="ansi-green-intense-fg ansi-bold">     25</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">fetch_data</span>(dataset_name, data_fetcher<span style="color: rgb(98,98,98)">=</span>data_fetcher):
+<span class="ansi-green-intense-fg ansi-bold">     26</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> data_fetcher <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg">---&gt; 27</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(<span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">Missing optional dependency </span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">pooch</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)"> required </span><span style="color: rgb(175,0,0)">"</span>
+<span class="ansi-green-intense-fg ansi-bold">     28</span>                           <span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">for scipy.datasets module. Please use pip or </span><span style="color: rgb(175,0,0)">"</span>
+<span class="ansi-green-intense-fg ansi-bold">     29</span>                           <span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">conda to install </span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">pooch</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">.</span><span style="color: rgb(175,0,0)">"</span>)
+<span class="ansi-green-intense-fg ansi-bold">     30</span>     <span style="color: rgb(95,135,135)"># The "fetch" method returns the full path to the downloaded data file.</span>
+<span class="ansi-green-intense-fg ansi-bold">     31</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> data_fetcher<span style="color: rgb(98,98,98)">.</span>fetch(dataset_name)
+
+<span class="ansi-red-fg">ImportError</span>: Missing optional dependency 'pooch' required for scipy.datasets module. Please use pip or conda to install 'pooch'.
+</pre></div></div>
+</div>
+</section>
+<section id="Create-Animation">
+<h2>Create Animation<a class="headerlink" href="#Create-Animation" title="Link to this heading">#</a></h2>
+<p>Create the animation of the image being rotated from 0 to 360 degrees.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a figure and axis</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">)</span>
+<span class="n">original_image</span> <span class="o">=</span> <span class="n">image_resized</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">image_rotated</span> <span class="o">=</span> <span class="n">original_image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">image_plot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_rotated</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">)</span>
+
+<span class="c1"># Animation function</span>
+<span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">image_rotated</span>
+    <span class="k">if</span> <span class="n">frame</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">image_rotated</span> <span class="o">=</span> <span class="n">rotate_image_splineops</span><span class="p">(</span><span class="n">image_rotated</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>  <span class="c1"># Rotate by 5 degrees each frame</span>
+    <span class="n">image_plot</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">image_rotated</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">image_plot</span><span class="p">]</span>
+
+<span class="c1"># Create the animation</span>
+<a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html#matplotlib.animation.FuncAnimation" title="matplotlib.animation.FuncAnimation"><span class="n">ani</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html#matplotlib.animation.FuncAnimation" title="matplotlib.animation.FuncAnimation"><span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span></a><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">animate</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="mi">73</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html#matplotlib.pyplot.close" title="matplotlib.pyplot.close"><span class="n">plt</span><span class="o">.</span><span class="n">close</span></a><span class="p">(</span><span class="n">fig</span><span class="p">)</span>  <span class="c1"># Prevents the initial still image from displaying</span>
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.Animation.html#matplotlib.animation.Animation.to_jshtml" title="matplotlib.animation.Animation.to_jshtml"><span class="n">ani</span><span class="o">.</span><span class="n">to_jshtml</span></a><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[4], line 4</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> fig, ax <span style="color: rgb(98,98,98)">=</span> plt<span style="color: rgb(98,98,98)">.</span>subplots()
+<span class="ansi-green-intense-fg ansi-bold">      3</span> ax<span style="color: rgb(98,98,98)">.</span>axis(<span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">off</span><span style="color: rgb(175,0,0)">'</span>)
+<span class="ansi-green-fg">----&gt; 4</span> original_image <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">image_resized</span><span style="color: rgb(98,98,98)">.</span>copy()
+<span class="ansi-green-intense-fg ansi-bold">      5</span> image_rotated <span style="color: rgb(98,98,98)">=</span> original_image<span style="color: rgb(98,98,98)">.</span>copy()
+<span class="ansi-green-intense-fg ansi-bold">      6</span> image_plot <span style="color: rgb(98,98,98)">=</span> ax<span style="color: rgb(98,98,98)">.</span>imshow(image_rotated, cmap<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">gray</span><span style="color: rgb(175,0,0)">'</span>)
+
+<span class="ansi-red-fg">NameError</span>: name 'image_resized' is not defined
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_image_rotation_2D_7_1.png" src="../_images/examples_image_rotation_2D_7_1.png"/>
+</div>
+</div>
+</section>
+</section>
+</article>
+<footer class="prev-next-footer d-print-none">
+<div class="prev-next-area">
+<a class="left-prev" href="tensorspline_api_call.html" title="previous page">
+<i class="fa-solid fa-angle-left"></i>
+<div class="prev-next-info">
+<p class="prev-next-subtitle">previous</p>
+<p class="prev-next-title">Example of using the TensorSpline API</p>
+</div>
+</a>
+<a class="right-next" href="image_rotation_2D_comparison_scipy.html" title="next page">
+<div class="prev-next-info">
+<p class="prev-next-subtitle">next</p>
+<p class="prev-next-title">Example of doing an image rotation in 2D and comparing against Scipy</p>
+</div>
+<i class="fa-solid fa-angle-right"></i>
+</a>
+</div>
+</footer>
+</div>
+<div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+<div class="sidebar-secondary-item">
+<div class="page-toc tocsection onthispage" id="pst-page-navigation-heading-2">
+<i class="fa-solid fa-list"></i> On this page
+  </div>
+<nav aria-labelledby="pst-page-navigation-heading-2" class="bd-toc-nav page-toc">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Helper-Functions">Helper Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-and-Preprocess-Image">Load and Preprocess Image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Create-Animation">Create Animation</a></li>
+</ul>
+</nav></div>
+<div class="sidebar-secondary-item">
+<div class="tocsection editthispage">
+<a href="https://github.com/Biomedical-Imaging-Group/splineops/edit/main/docs/examples/image_rotation_2D.ipynb">
+<i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+</div>
+</div>
+<div class="sidebar-secondary-item">
+<div class="tocsection sourcelink">
+<a href="../_sources/examples/image_rotation_2D.ipynb.txt">
+<i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+</div>
+</div></div>
+</div>
+<footer class="bd-footer-content">
+</footer>
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+<footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+<div class="footer-items__start">
+<div class="footer-item">
+<p class="copyright">
+    
+      © Copyright 2024, BIG lab.
+      <br/>
+</p>
+</div>
+<div class="footer-item">
+<p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+</p>
+</div>
+</div>
+<div class="footer-items__end">
+<div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+</div>
+</div>
+</footer>
+</body>
+</html>
