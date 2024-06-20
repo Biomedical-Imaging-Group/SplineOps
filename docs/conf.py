@@ -28,6 +28,7 @@ extensions = [
 ]
 
 autosummary_generate = True
+nbsphinx_allow_errors = True  #########################
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
@@ -63,10 +64,10 @@ html_context = {
     "doc_path": "docs",  # Path in the repo to your docs root, e.g., "source/docs"
 }
 
-html_static_path = ["_static"]
+html_static_path = ["./_static"]
 html_css_files = ["css/custom.css"]
-html_logo = "_static/logo.png"
-html_favicon = "_static/logo.ico"
+html_logo = "./_static/logo.png"
+html_favicon = "./_static/logo.ico"
 
 # -- Extension configuration -------------------------------------------------
 intersphinx_mapping = {

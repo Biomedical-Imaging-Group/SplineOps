@@ -3,7 +3,7 @@
    contain the root `toctree` directive.
 
 SplineOps - Spline Signal Processing
-===================================
+====================================
 
 .. raw:: html
 
