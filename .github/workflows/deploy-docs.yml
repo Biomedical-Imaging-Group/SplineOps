@@ -1,0 +1,52 @@
+name: Deploy Sphinx Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: '3.9'
+          auto-update-conda: true
+          auto-activate-base: false
+
+      - name: Create Conda environment
+        run: conda create --name splineops_env python=3.9
+
+      - name: Install dependencies
+        run: |
+          conda run -n splineops_env conda install cupy cuda-version=12.3 numpy scipy black mypy pytest matplotlib pooch ffmpeg -c conda-forge
+          conda run -n splineops_env pip install tox hatch
+          conda run -n splineops_env pip install sphinx nbsphinx sphinx_design sphinx_togglebutton sphinx_codeautolink sphinx_copybutton jupyter_sphinx sphinx-rtd-theme pydata-sphinx-theme
+          conda run -n splineops_env pip install -e .
+
+      - name: Install Pandoc
+        uses: pandoc/actions/setup@main
+
+      - name: Build documentation
+        run: conda run -n splineops_env sphinx-build -b html docs/ docs/build/html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
