@@ -4,7 +4,7 @@
   "api/index": [],
   "examples/gpu_interoperability_using_cupy": [
     {
-      "source": "import numpy as np\nimport cupy as cp\nimport matplotlib.pyplot as plt\nfrom splineops.interpolate.tensorspline import TensorSpline",
+      "source": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom splineops.interpolate.tensorspline import TensorSpline\ntry:\n    import cupy as cp\n    gpu_available = cp.cuda.runtime.getDeviceCount() > 0\nexcept (ImportError, cp.cuda.runtime.CUDARuntimeError, NameError):\n    gpu_available = False\n    cp = np  # Fall back to NumPy if CuPy is not available",
       "names": [
         {
           "import_components": [
@@ -22,8 +22,8 @@
             "pyplot"
           ],
           "code_str": "matplotlib.pyplot",
-          "lineno": 3,
-          "end_lineno": 3,
+          "lineno": 2,
+          "end_lineno": 2,
           "context": "import_target",
           "resolved_location": "matplotlib.pyplot"
         },
@@ -34,8 +34,8 @@
             "tensorspline"
           ],
           "code_str": "splineops.interpolate.tensorspline",
-          "lineno": 4,
-          "end_lineno": 4,
+          "lineno": 3,
+          "end_lineno": 3,
           "context": "import_from",
           "resolved_location": "splineops.interpolate.tensorspline"
         },
@@ -47,10 +47,50 @@
             "TensorSpline"
           ],
           "code_str": "TensorSpline",
-          "lineno": 4,
-          "end_lineno": 4,
+          "lineno": 3,
+          "end_lineno": 3,
           "context": "import_target",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
+        },
+        {
+          "import_components": [
+            "ImportError"
+          ],
+          "code_str": "ImportError",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "ImportError"
+        },
+        {
+          "import_components": [
+            "NameError"
+          ],
+          "code_str": "NameError",
+          "lineno": 7,
+          "end_lineno": 7,
+          "context": "none",
+          "resolved_location": "NameError"
+        },
+        {
+          "import_components": [
+            "numpy"
+          ],
+          "code_str": "np",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "none",
+          "resolved_location": "numpy"
+        },
+        {
+          "import_components": [
+            "numpy"
+          ],
+          "code_str": "cp",
+          "lineno": 9,
+          "end_lineno": 9,
+          "context": "none",
+          "resolved_location": "numpy"
         }
       ],
       "example": {
@@ -199,8 +239,41 @@
       "doc_lineno": null
     },
     {
-      "source": "data_cp = cp.asarray(data)\ncoordinates_cp = cp.asarray(xx), cp.asarray(yy)\ntensor_spline_cp = TensorSpline(\n    data=data_cp, coordinates=coordinates_cp, bases=bases, modes=modes\n)",
+      "source": "if gpu_available:\n    data_cp = cp.asarray(data)\n    coordinates_cp = cp.asarray(xx), cp.asarray(yy)\n    tensor_spline_cp = TensorSpline(\n        data=data_cp, coordinates=coordinates_cp, bases=bases, modes=modes\n    )\nelse:\n    data_cp = data\n    coordinates_cp = xx, yy\n    tensor_spline_cp = tensor_spline_np  # Fallback to NumPy tensor spline",
       "names": [
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "cp.asarray",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "cp.asarray",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "cp.asarray",
+          "lineno": 3,
+          "end_lineno": 3,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
         {
           "import_components": [
             "splineops",
@@ -209,8 +282,8 @@
             "TensorSpline"
           ],
           "code_str": "TensorSpline",
-          "lineno": 3,
-          "end_lineno": 3,
+          "lineno": 4,
+          "end_lineno": 4,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         },
@@ -223,8 +296,36 @@
             "()"
           ],
           "code_str": "tensor_spline_cp",
-          "lineno": 3,
-          "end_lineno": 3,
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
+        },
+        {
+          "import_components": [
+            "splineops",
+            "interpolate",
+            "tensorspline",
+            "TensorSpline",
+            "()"
+          ],
+          "code_str": "tensor_spline_np",
+          "lineno": 10,
+          "end_lineno": 10,
+          "context": "none",
+          "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
+        },
+        {
+          "import_components": [
+            "splineops",
+            "interpolate",
+            "tensorspline",
+            "TensorSpline",
+            "()"
+          ],
+          "code_str": "tensor_spline_cp",
+          "lineno": 10,
+          "end_lineno": 10,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         }
@@ -304,8 +405,30 @@
       "doc_lineno": null
     },
     {
-      "source": "eval_coords_cp = cp.asarray(eval_xx), cp.asarray(eval_yy)\ndata_eval_cp = tensor_spline_cp(coordinates=eval_coords_cp)",
+      "source": "if gpu_available:\n    eval_coords_cp = cp.asarray(eval_xx), cp.asarray(eval_yy)\n    data_eval_cp = tensor_spline_cp(coordinates=eval_coords_cp)\nelse:\n    eval_coords_cp = eval_coords_np\n    data_eval_cp = data_eval_np  # Fallback to NumPy evaluation",
       "names": [
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "cp.asarray",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "cp.asarray",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
         {
           "import_components": [
             "splineops",
@@ -315,8 +438,8 @@
             "()"
           ],
           "code_str": "tensor_spline_cp",
-          "lineno": 2,
-          "end_lineno": 2,
+          "lineno": 3,
+          "end_lineno": 3,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         }
@@ -332,7 +455,7 @@
       "doc_lineno": null
     },
     {
-      "source": "abs_diff = np.abs(data_eval_cp.get() - data_eval_np)\nmse = np.mean((data_eval_cp.get() - data_eval_np) ** 2)\nprint(f\"Maximum absolute difference: {np.max(abs_diff)}\")\nprint(f\"Mean square error: {mse}\")",
+      "source": "if gpu_available:\n    data_eval_cp_np = data_eval_cp.get()  # Convert CuPy array to NumPy array\n    abs_diff = np.abs(data_eval_cp_np - data_eval_np)\n    mse = np.mean((data_eval_cp_np - data_eval_np) ** 2)\nelse:\n    abs_diff = np.abs(data_eval_cp - data_eval_np)\n    mse = np.mean((data_eval_cp - data_eval_np) ** 2)\nprint(f\"Maximum absolute difference: {np.max(abs_diff)}\")\nprint(f\"Mean square error: {mse}\")",
       "names": [
         {
           "import_components": [
@@ -340,8 +463,19 @@
             "mean"
           ],
           "code_str": "np.mean",
-          "lineno": 2,
-          "end_lineno": 2,
+          "lineno": 4,
+          "end_lineno": 4,
+          "context": "none",
+          "resolved_location": "numpy.mean"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "mean"
+          ],
+          "code_str": "np.mean",
+          "lineno": 7,
+          "end_lineno": 7,
           "context": "none",
           "resolved_location": "numpy.mean"
         },
@@ -351,8 +485,8 @@
             "max"
           ],
           "code_str": "np.max",
-          "lineno": 3,
-          "end_lineno": 3,
+          "lineno": 8,
+          "end_lineno": 8,
           "context": "none",
           "resolved_location": "numpy.max"
         },
@@ -361,8 +495,8 @@
             "print"
           ],
           "code_str": "print",
-          "lineno": 3,
-          "end_lineno": 3,
+          "lineno": 8,
+          "end_lineno": 8,
           "context": "none",
           "resolved_location": "print"
         },
@@ -371,8 +505,8 @@
             "print"
           ],
           "code_str": "print",
-          "lineno": 4,
-          "end_lineno": 4,
+          "lineno": 9,
+          "end_lineno": 9,
           "context": "none",
           "resolved_location": "print"
         }
@@ -388,7 +522,7 @@
       "doc_lineno": null
     },
     {
-      "source": "fig, axes = plt.subplots(\n    nrows=1, ncols=3, sharex=\"all\", sharey=\"all\", layout=\"constrained\"\n)\nax = axes[0]\nax.imshow(data_eval_np.T)\nax.set_title(\"NumPy\")\nax = axes[1]\nax.set_title(\"CuPy\")\nax.imshow(data_eval_cp.get().T)\nax = axes[2]\nax.set_title(f\"Absolute difference\\n(MSE: {mse:.2e})\")\nax.imshow(abs_diff.T)\n\nplt.show()",
+      "source": "fig, axes = plt.subplots(\n    nrows=1, ncols=3, sharex=\"all\", sharey=\"all\", layout=\"constrained\"\n)\nax = axes[0]\nax.imshow(data_eval_np.T)\nax.set_title(\"NumPy\")\nif gpu_available:\n    data_eval_cp_np = data_eval_cp.get()  # Ensure we have a NumPy array\n    ax = axes[1]\n    ax.set_title(\"CuPy\")\n    ax.imshow(data_eval_cp_np.T)\nelse:\n    ax = axes[1]\n    ax.set_title(\"CuPy (not available)\")\n    ax.imshow(data_eval_np.T)\nax = axes[2]\nax.set_title(f\"Absolute difference\\n(MSE: {mse:.2e})\")\nax.imshow(abs_diff.T)\n\nplt.show()",
       "names": [
         {
           "import_components": [
@@ -409,8 +543,8 @@
             "show"
           ],
           "code_str": "plt.show",
-          "lineno": 14,
-          "end_lineno": 14,
+          "lineno": 20,
+          "end_lineno": 20,
           "context": "none",
           "resolved_location": "matplotlib.pyplot.show"
         }
