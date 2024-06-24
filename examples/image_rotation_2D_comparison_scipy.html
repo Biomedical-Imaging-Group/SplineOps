@@ -266,7 +266,6 @@ document.write(`
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/index.html#module-numpy" title="numpy"><span class="nn">numpy</span></a> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
 <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/pyplot_summary.html#module-matplotlib.pyplot" title="matplotlib.pyplot"><span class="nn">matplotlib.pyplot</span></a> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/time.html#module-time" title="time"><span class="nn">time</span></a>
 <span class="kn">from</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="scipy"><span class="nn">scipy</span></a> <span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/ndimage.html#module-scipy.ndimage" title="scipy.ndimage"><span class="n">ndimage</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="https://docs.scipy.org/doc/scipy/reference/datasets.html#module-scipy.datasets" title="scipy.datasets"><span class="n">datasets</span></a>
@@ -398,16 +397,16 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="Rotate-Image-and-Crop-using-BSSP">
-<h2>Rotate Image and Crop using BSSP<a class="headerlink" href="#Rotate-Image-and-Crop-using-BSSP" title="Link to this heading">#</a></h2>
-<p>Rotate an image by a specified angle using the BSSP library’s TensorSpline method and crop the result.</p>
+<section id="Rotate-Image-and-Crop-using-SplineOps">
+<h2>Rotate Image and Crop using SplineOps<a class="headerlink" href="#Rotate-Image-and-Crop-using-SplineOps" title="Link to this heading">#</a></h2>
+<p>Rotate an image by a specified angle using the splineops library’s TensorSpline method and crop the result.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rotate_image_and_crop_bssp</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rotate_image_and_crop_splineops</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Rotate an image by a specified angle using the BSSP library's TensorSpline method and crop the result.</span>
+<span class="sd">    Rotate an image by a specified angle using the splineops library's TensorSpline method and crop the result.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">    - image: The input image as a 2D numpy array.</span>
@@ -425,35 +424,29 @@ document.write(`
     <span class="n">yy</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.ascontiguousarray.html#numpy.ascontiguousarray" title="numpy.ascontiguousarray"><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span></a><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
-    <span class="n">rotated_image_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">xx_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
-    <span class="n">yy_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span>
-
     <span class="n">degree</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#max" title="max"><span class="nb">max</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#min" title="min"><span class="nb">min</span></a><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
     <span class="n">basis</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"bspline</span><span class="si">{</span><span class="n">degree</span><span class="si">}</span><span class="s2">"</span>
 
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/stdtypes.html#range" title="range"><span class="nb">range</span></a><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
         <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">tensor_spline</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">TensorSpline</span></a><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">rotated_image_cp</span><span class="p">,</span> <span class="n">coordinates</span><span class="o">=</span><span class="p">(</span><span class="n">yy_cp</span><span class="p">,</span> <span class="n">xx_cp</span><span class="p">),</span> <span class="n">bases</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="n">mode</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="o">=</span><span class="p">(</span><span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">),</span> <span class="n">bases</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="n">mode</span>
         <span class="p">)</span>
         <span class="n">angle_rad</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.radians.html#numpy.radians" title="numpy.radians"><span class="n">np</span><span class="o">.</span><span class="n">radians</span></a><span class="p">(</span><span class="o">-</span><span class="n">angle</span><span class="p">)</span>
         <span class="n">cos_angle</span><span class="p">,</span> <span class="n">sin_angle</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.cos.html#numpy.cos" title="numpy.cos"><span class="n">np</span><span class="o">.</span><span class="n">cos</span></a><span class="p">(</span><span class="n">angle_rad</span><span class="p">),</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.sin.html#numpy.sin" title="numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
         <span class="n">original_center_x</span><span class="p">,</span> <span class="n">original_center_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
-        <span class="n">oy</span><span class="p">,</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">ny</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">nx</span><span class="p">]</span>
+        <span class="n">oy</span><span class="p">,</span> <span class="n">ox</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.ogrid.html#numpy.ogrid" title="numpy.ogrid"><span class="n">np</span><span class="o">.</span><span class="n">ogrid</span></a><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">ny</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">nx</span><span class="p">]</span>
         <span class="n">ox</span> <span class="o">=</span> <span class="n">ox</span> <span class="o">-</span> <span class="n">original_center_x</span>
         <span class="n">oy</span> <span class="o">=</span> <span class="n">oy</span> <span class="o">-</span> <span class="n">original_center_y</span>
 
         <span class="n">nx_coords</span> <span class="o">=</span> <span class="n">cos_angle</span> <span class="o">*</span> <span class="n">ox</span> <span class="o">+</span> <span class="n">sin_angle</span> <span class="o">*</span> <span class="n">oy</span> <span class="o">+</span> <span class="n">original_center_x</span>
         <span class="n">ny_coords</span> <span class="o">=</span> <span class="o">-</span><span class="n">sin_angle</span> <span class="o">*</span> <span class="n">ox</span> <span class="o">+</span> <span class="n">cos_angle</span> <span class="o">*</span> <span class="n">oy</span> <span class="o">+</span> <span class="n">original_center_y</span>
 
-        <span class="n">eval_coords_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ny_coords</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="n">eval_coords</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.asarray.html#numpy.asarray" title="numpy.asarray"><span class="n">np</span><span class="o">.</span><span class="n">asarray</span></a><span class="p">(</span><span class="n">ny_coords</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.asarray.html#numpy.asarray" title="numpy.asarray"><span class="n">np</span><span class="o">.</span><span class="n">asarray</span></a><span class="p">(</span>
             <span class="n">nx_coords</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">interpolated_values_cp</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">tensor_spline</span></a><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="n">eval_coords_cp</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">rotated_image_cp</span> <span class="o">=</span> <span class="n">interpolated_values_cp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+        <span class="n">interpolated_values</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../api/core/tensorspline.html#splineops.interpolate.tensorspline.TensorSpline" title="splineops.interpolate.tensorspline.TensorSpline"><span class="n">tensor_spline</span></a><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="n">eval_coords</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">rotated_image</span> <span class="o">=</span> <span class="n">interpolated_values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
 
-    <span class="n">rotated_image</span> <span class="o">=</span> <span class="n">rotated_image_cp</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-    <span class="n">cp</span><span class="o">.</span><span class="n">get_default_memory_pool</span><span class="p">()</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">rotated_image</span>
 </pre></div>
 </div>
@@ -491,14 +484,14 @@ document.write(`
 </section>
 <section id="Benchmark-and-Display-Rotation">
 <h2>Benchmark and Display Rotation<a class="headerlink" href="#Benchmark-and-Display-Rotation" title="Link to this heading">#</a></h2>
-<p>Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.</p>
+<p>Perform a benchmark of the rotation operation for both SplineOps and SciPy libraries and display images.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">benchmark_and_display_rotation</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.</span>
+<span class="sd">    Perform a benchmark of the rotation operation for both splineops and SciPy libraries and display images.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">    - image: The input image as a 2D numpy array.</span>
@@ -507,7 +500,7 @@ document.write(`
 <span class="sd">    - iterations: The number of iterations to apply the rotation.</span>
 <span class="sd">    """</span>
     <span class="n">start_time_custom</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/time.html#time.time" title="time.time"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span>
-    <span class="n">custom_rotated_and_cropped_bssp</span> <span class="o">=</span> <span class="n">rotate_image_and_crop_bssp</span><span class="p">(</span>
+    <span class="n">custom_rotated_and_cropped_splineops</span> <span class="o">=</span> <span class="n">rotate_image_and_crop_splineops</span><span class="p">(</span>
         <span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="n">degree</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"zero"</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span>
     <span class="p">)</span>
     <span class="n">time_custom</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/time.html#time.time" title="time.time"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span> <span class="o">-</span> <span class="n">start_time_custom</span>
@@ -520,22 +513,22 @@ document.write(`
 
     <span class="n">bounds</span> <span class="o">=</span> <span class="n">calculate_inscribed_rectangle_bounds_from_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
     <span class="n">image_cropped</span> <span class="o">=</span> <span class="n">crop_image_to_bounds</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
-    <span class="n">custom_rotated_and_cropped_bssp</span> <span class="o">=</span> <span class="n">crop_image_to_bounds</span><span class="p">(</span>
-        <span class="n">custom_rotated_and_cropped_bssp</span><span class="p">,</span> <span class="n">bounds</span>
+    <span class="n">custom_rotated_and_cropped_splineops</span> <span class="o">=</span> <span class="n">crop_image_to_bounds</span><span class="p">(</span>
+        <span class="n">custom_rotated_and_cropped_splineops</span><span class="p">,</span> <span class="n">bounds</span>
     <span class="p">)</span>
     <span class="n">scipy_rotated_and_cropped</span> <span class="o">=</span> <span class="n">crop_image_to_bounds</span><span class="p">(</span><span class="n">scipy_rotated_and_cropped</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
 
-    <span class="n">snr_bssp</span> <span class="o">=</span> <span class="n">calculate_snr</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">custom_rotated_and_cropped_bssp</span><span class="p">)</span>
+    <span class="n">snr_splineops</span> <span class="o">=</span> <span class="n">calculate_snr</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">custom_rotated_and_cropped_splineops</span><span class="p">)</span>
     <span class="n">snr_scipy</span> <span class="o">=</span> <span class="n">calculate_snr</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">scipy_rotated_and_cropped</span><span class="p">)</span>
-    <span class="n">mse_bssp</span> <span class="o">=</span> <span class="n">calculate_mse</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">custom_rotated_and_cropped_bssp</span><span class="p">)</span>
+    <span class="n">mse_splineops</span> <span class="o">=</span> <span class="n">calculate_mse</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">custom_rotated_and_cropped_splineops</span><span class="p">)</span>
     <span class="n">mse_scipy</span> <span class="o">=</span> <span class="n">calculate_mse</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">scipy_rotated_and_cropped</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Original Image"</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">custom_rotated_and_cropped_bssp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">custom_rotated_and_cropped_splineops</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"BSSP Rotated</span><span class="se">\n</span><span class="s2">SNR: </span><span class="si">{</span><span class="n">snr_bssp</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">dB, MSE: </span><span class="si">{</span><span class="n">mse_bssp</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="se">\n</span><span class="s2">Angle: </span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s2">°, Iter: </span><span class="si">{</span><span class="n">iterations</span><span class="si">}</span><span class="se">\n</span><span class="s2">Degree: </span><span class="si">{</span><span class="n">degree</span><span class="si">}</span><span class="s2">, Time: </span><span class="si">{</span><span class="n">time_custom</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s"</span>
+        <span class="sa">f</span><span class="s2">"SplineOps Rotated</span><span class="se">\n</span><span class="s2">SNR: </span><span class="si">{</span><span class="n">snr_splineops</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">dB, MSE: </span><span class="si">{</span><span class="n">mse_splineops</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="se">\n</span><span class="s2">Angle: </span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s2">°, Iter: </span><span class="si">{</span><span class="n">iterations</span><span class="si">}</span><span class="se">\n</span><span class="s2">Degree: </span><span class="si">{</span><span class="n">degree</span><span class="si">}</span><span class="s2">, Time: </span><span class="si">{</span><span class="n">time_custom</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s"</span>
     <span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">scipy_rotated_and_cropped</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
@@ -551,7 +544,7 @@ document.write(`
 </section>
 <section id="Load-Image-and-Perform-Rotations">
 <h2>Load Image and Perform Rotations<a class="headerlink" href="#Load-Image-and-Perform-Rotations" title="Link to this heading">#</a></h2>
-<p>Load the image, perform rotations using both BSSP and SciPy methods, and display the results.</p>
+<p>Load the image, perform rotations using both SplineOps and SciPy methods, and display the results.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -580,69 +573,8 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">CUDARuntimeError</span>                          Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[9], line 17</span>
-<span class="ansi-green-intense-fg ansi-bold">     14</span> image_resized <span style="color: rgb(98,98,98)">=</span> image_resized<span style="color: rgb(98,98,98)">.</span>astype(np<span style="color: rgb(98,98,98)">.</span>float32)
-<span class="ansi-green-intense-fg ansi-bold">     16</span> <span style="color: rgb(95,135,135)"># Benchmark and display rotation results</span>
-<span class="ansi-green-fg">---&gt; 17</span> <span class="ansi-yellow-bg">benchmark_and_display_rotation</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">image_resized</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">angle</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">iterations</span><span class="ansi-yellow-bg">)</span>
-
-Cell <span class="ansi-green-fg">In[8], line 12</span>, in <span class="ansi-cyan-fg">benchmark_and_display_rotation</span><span class="ansi-blue-fg">(image, angle, degree, iterations)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span style="color: rgb(175,0,0)">"""</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(175,0,0)">Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> <span style="color: rgb(175,0,0)">- iterations: The number of iterations to apply the rotation.</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span> <span style="color: rgb(175,0,0)">"""</span>
-<span class="ansi-green-intense-fg ansi-bold">     11</span> start_time_custom <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time()
-<span class="ansi-green-fg">---&gt; 12</span> custom_rotated_and_cropped_bssp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">rotate_image_and_crop_bssp</span><span class="ansi-yellow-bg">(</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">image</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">angle</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">zero</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">iterations</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">iterations</span>
-<span class="ansi-green-intense-fg ansi-bold">     14</span> <span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     15</span> time_custom <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time() <span style="color: rgb(98,98,98)">-</span> start_time_custom
-<span class="ansi-green-intense-fg ansi-bold">     17</span> start_time_scipy <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time()
-
-Cell <span class="ansi-green-fg">In[6], line 21</span>, in <span class="ansi-cyan-fg">rotate_image_and_crop_bssp</span><span class="ansi-blue-fg">(image, angle, degree, mode, iterations)</span>
-<span class="ansi-green-intense-fg ansi-bold">     18</span> yy <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>linspace(<span style="color: rgb(98,98,98)">0</span>, ny <span style="color: rgb(98,98,98)">-</span> <span style="color: rgb(98,98,98)">1</span>, ny, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
-<span class="ansi-green-intense-fg ansi-bold">     19</span> data <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>ascontiguousarray(image, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
-<span class="ansi-green-fg">---&gt; 21</span> rotated_image_cp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">cp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">asarray</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     22</span> xx_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(xx)
-<span class="ansi-green-intense-fg ansi-bold">     23</span> yy_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(yy)
-
-File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/cupy/_creation/from_data.py:88</span>, in <span class="ansi-cyan-fg">asarray</span><span class="ansi-blue-fg">(a, dtype, order, blocking)</span>
-<span class="ansi-green-intense-fg ansi-bold">     56</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">asarray</span>(a, dtype<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, order<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span style="color: rgb(98,98,98)">*</span>, blocking<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
-<span class="ansi-green-intense-fg ansi-bold">     57</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">"""Converts an object to array.</span>
-<span class="ansi-green-intense-fg ansi-bold">     58</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span> <span style="color: rgb(175,0,0)">    This is equivalent to ``array(a, dtype, copy=False, order=order)``.</span>
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">     86</span>
-<span class="ansi-green-intense-fg ansi-bold">     87</span> <span style="color: rgb(175,0,0)">    """</span>
-<span class="ansi-green-fg">---&gt; 88</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">_core</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">a</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dtype</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-fg">cupy/_core/core.pyx:2383</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/_core/core.pyx:2410</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/_core/core.pyx:2553</span>, in <span class="ansi-cyan-fg">cupy._core.core._array_default</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/_core/core.pyx:135</span>, in <span class="ansi-cyan-fg">cupy._core.core.ndarray.__new__</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/_core/core.pyx:223</span>, in <span class="ansi-cyan-fg">cupy._core.core._ndarray_base._init</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/cuda/memory.pyx:738</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.alloc</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1424</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1444</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy/cuda/device.pyx:40</span>, in <span class="ansi-cyan-fg">cupy.cuda.device.get_device_id</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:202</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.getDevice</span><span class="ansi-blue-fg">()</span>
-
-File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:146</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.check_status</span><span class="ansi-blue-fg">()</span>
-
-<span class="ansi-red-fg">CUDARuntimeError</span>: cudaErrorInsufficientDriver: CUDA driver version is insufficient for CUDA runtime version
-</pre></div></div>
+<img alt="../_images/examples_image_rotation_2D_comparison_scipy_17_0.png" src="../_images/examples_image_rotation_2D_comparison_scipy_17_0.png"/>
+</div>
 </div>
 </section>
 </section>
@@ -677,7 +609,7 @@ File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:146</span>, 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Crop-Image-to-Bounds">Crop Image to Bounds</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Calculate-Signal-to-Noise-Ratio-(SNR)">Calculate Signal-to-Noise Ratio (SNR)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Calculate-Mean-Squared-Error-(MSE)">Calculate Mean Squared Error (MSE)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Rotate-Image-and-Crop-using-BSSP">Rotate Image and Crop using BSSP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Rotate-Image-and-Crop-using-SplineOps">Rotate Image and Crop using SplineOps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Rotate-Image-and-Crop-using-SciPy">Rotate Image and Crop using SciPy</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Benchmark-and-Display-Rotation">Benchmark and Display Rotation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-Image-and-Perform-Rotations">Load Image and Perform Rotations</a></li>

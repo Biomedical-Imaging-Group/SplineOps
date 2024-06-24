@@ -1002,7 +1002,7 @@
   ],
   "examples/image_rotation_2D_comparison_scipy": [
     {
-      "source": "#!/usr/bin/env python3\nimport numpy as np\nimport cupy as cp\nimport matplotlib.pyplot as plt\nimport time\nfrom scipy import ndimage, datasets\n\nfrom splineops.interpolate.tensorspline import TensorSpline",
+      "source": "#!/usr/bin/env python3\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport time\nfrom scipy import ndimage, datasets\n\nfrom splineops.interpolate.tensorspline import TensorSpline",
       "names": [
         {
           "import_components": [
@@ -1020,8 +1020,8 @@
             "pyplot"
           ],
           "code_str": "matplotlib.pyplot",
-          "lineno": 4,
-          "end_lineno": 4,
+          "lineno": 3,
+          "end_lineno": 3,
           "context": "import_target",
           "resolved_location": "matplotlib.pyplot"
         },
@@ -1030,8 +1030,8 @@
             "time"
           ],
           "code_str": "time",
-          "lineno": 5,
-          "end_lineno": 5,
+          "lineno": 4,
+          "end_lineno": 4,
           "context": "import_target",
           "resolved_location": "time"
         },
@@ -1040,8 +1040,8 @@
             "scipy"
           ],
           "code_str": "scipy",
-          "lineno": 6,
-          "end_lineno": 6,
+          "lineno": 5,
+          "end_lineno": 5,
           "context": "import_from",
           "resolved_location": "scipy"
         },
@@ -1051,8 +1051,8 @@
             "ndimage"
           ],
           "code_str": "ndimage",
-          "lineno": 6,
-          "end_lineno": 6,
+          "lineno": 5,
+          "end_lineno": 5,
           "context": "import_target",
           "resolved_location": "scipy.ndimage"
         },
@@ -1062,8 +1062,8 @@
             "datasets"
           ],
           "code_str": "datasets",
-          "lineno": 6,
-          "end_lineno": 6,
+          "lineno": 5,
+          "end_lineno": 5,
           "context": "import_target",
           "resolved_location": "scipy.datasets"
         },
@@ -1074,8 +1074,8 @@
             "tensorspline"
           ],
           "code_str": "splineops.interpolate.tensorspline",
-          "lineno": 8,
-          "end_lineno": 8,
+          "lineno": 7,
+          "end_lineno": 7,
           "context": "import_from",
           "resolved_location": "splineops.interpolate.tensorspline"
         },
@@ -1087,8 +1087,8 @@
             "TensorSpline"
           ],
           "code_str": "TensorSpline",
-          "lineno": 8,
-          "end_lineno": 8,
+          "lineno": 7,
+          "end_lineno": 7,
           "context": "import_target",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         }
@@ -1274,7 +1274,7 @@
       "doc_lineno": null
     },
     {
-      "source": "def rotate_image_and_crop_bssp(image, angle, degree=3, mode=\"zero\", iterations=1):\n    \"\"\"\n    Rotate an image by a specified angle using the BSSP library's TensorSpline method and crop the result.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - mode: The mode for handling boundaries (default is \"zero\").\n    - iterations: The number of iterations to apply the rotation.\n\n    Returns:\n    - Rotated image as a 2D numpy array.\n    \"\"\"\n    dtype = image.dtype\n    ny, nx = image.shape\n    xx = np.linspace(0, nx - 1, nx, dtype=dtype)\n    yy = np.linspace(0, ny - 1, ny, dtype=dtype)\n    data = np.ascontiguousarray(image, dtype=dtype)\n\n    rotated_image_cp = cp.asarray(data)\n    xx_cp = cp.asarray(xx)\n    yy_cp = cp.asarray(yy)\n\n    degree = max(0, min(degree, 7))\n    basis = f\"bspline{degree}\"\n\n    for _ in range(iterations):\n        tensor_spline = TensorSpline(\n            data=rotated_image_cp, coordinates=(yy_cp, xx_cp), bases=basis, modes=mode\n        )\n        angle_rad = np.radians(-angle)\n        cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)\n        original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0\n        oy, ox = cp.ogrid[0:ny, 0:nx]\n        ox = ox - original_center_x\n        oy = oy - original_center_y\n\n        nx_coords = cos_angle * ox + sin_angle * oy + original_center_x\n        ny_coords = -sin_angle * ox + cos_angle * oy + original_center_y\n\n        eval_coords_cp = cp.asarray(ny_coords.flatten()), cp.asarray(\n            nx_coords.flatten()\n        )\n        interpolated_values_cp = tensor_spline(coordinates=eval_coords_cp, grid=False)\n        rotated_image_cp = interpolated_values_cp.reshape(ny, nx)\n\n    rotated_image = rotated_image_cp.get()\n    cp.get_default_memory_pool().free_all_blocks()\n    return rotated_image",
+      "source": "def rotate_image_and_crop_splineops(image, angle, degree=3, mode=\"zero\", iterations=1):\n    \"\"\"\n    Rotate an image by a specified angle using the splineops library's TensorSpline method and crop the result.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - mode: The mode for handling boundaries (default is \"zero\").\n    - iterations: The number of iterations to apply the rotation.\n\n    Returns:\n    - Rotated image as a 2D numpy array.\n    \"\"\"\n    dtype = image.dtype\n    ny, nx = image.shape\n    xx = np.linspace(0, nx - 1, nx, dtype=dtype)\n    yy = np.linspace(0, ny - 1, ny, dtype=dtype)\n    data = np.ascontiguousarray(image, dtype=dtype)\n\n    degree = max(0, min(degree, 7))\n    basis = f\"bspline{degree}\"\n\n    for _ in range(iterations):\n        tensor_spline = TensorSpline(\n            data=data, coordinates=(yy, xx), bases=basis, modes=mode\n        )\n        angle_rad = np.radians(-angle)\n        cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)\n        original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0\n        oy, ox = np.ogrid[0:ny, 0:nx]\n        ox = ox - original_center_x\n        oy = oy - original_center_y\n\n        nx_coords = cos_angle * ox + sin_angle * oy + original_center_x\n        ny_coords = -sin_angle * ox + cos_angle * oy + original_center_y\n\n        eval_coords = np.asarray(ny_coords.flatten()), np.asarray(\n            nx_coords.flatten()\n        )\n        interpolated_values = tensor_spline(coordinates=eval_coords, grid=False)\n        rotated_image = interpolated_values.reshape(ny, nx)\n\n    return rotated_image",
       "names": [
         {
           "import_components": [
@@ -1314,8 +1314,8 @@
             "min"
           ],
           "code_str": "min",
-          "lineno": 25,
-          "end_lineno": 25,
+          "lineno": 21,
+          "end_lineno": 21,
           "context": "none",
           "resolved_location": "min"
         },
@@ -1324,8 +1324,8 @@
             "max"
           ],
           "code_str": "max",
-          "lineno": 25,
-          "end_lineno": 25,
+          "lineno": 21,
+          "end_lineno": 21,
           "context": "none",
           "resolved_location": "max"
         },
@@ -1334,8 +1334,8 @@
             "range"
           ],
           "code_str": "range",
-          "lineno": 28,
-          "end_lineno": 28,
+          "lineno": 24,
+          "end_lineno": 24,
           "context": "none",
           "resolved_location": "range"
         },
@@ -1347,8 +1347,8 @@
             "TensorSpline"
           ],
           "code_str": "TensorSpline",
-          "lineno": 29,
-          "end_lineno": 29,
+          "lineno": 25,
+          "end_lineno": 25,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         },
@@ -1361,8 +1361,8 @@
             "()"
           ],
           "code_str": "tensor_spline",
-          "lineno": 29,
-          "end_lineno": 29,
+          "lineno": 25,
+          "end_lineno": 25,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         },
@@ -1372,8 +1372,8 @@
             "radians"
           ],
           "code_str": "np.radians",
-          "lineno": 32,
-          "end_lineno": 32,
+          "lineno": 28,
+          "end_lineno": 28,
           "context": "none",
           "resolved_location": "numpy.radians"
         },
@@ -1383,8 +1383,8 @@
             "cos"
           ],
           "code_str": "np.cos",
-          "lineno": 33,
-          "end_lineno": 33,
+          "lineno": 29,
+          "end_lineno": 29,
           "context": "none",
           "resolved_location": "numpy.cos"
         },
@@ -1394,10 +1394,43 @@
             "sin"
           ],
           "code_str": "np.sin",
-          "lineno": 33,
-          "end_lineno": 33,
+          "lineno": 29,
+          "end_lineno": 29,
           "context": "none",
           "resolved_location": "numpy.sin"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "ogrid"
+          ],
+          "code_str": "np.ogrid",
+          "lineno": 31,
+          "end_lineno": 31,
+          "context": "none",
+          "resolved_location": "numpy.ogrid"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "np.asarray",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
+        },
+        {
+          "import_components": [
+            "numpy",
+            "asarray"
+          ],
+          "code_str": "np.asarray",
+          "lineno": 38,
+          "end_lineno": 38,
+          "context": "none",
+          "resolved_location": "numpy.asarray"
         },
         {
           "import_components": [
@@ -1408,18 +1441,18 @@
             "()"
           ],
           "code_str": "tensor_spline",
-          "lineno": 45,
-          "end_lineno": 45,
+          "lineno": 41,
+          "end_lineno": 41,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         }
       ],
       "example": {
         "document": "examples/image_rotation_2D_comparison_scipy",
-        "ref_id": "Rotate-Image-and-Crop-using-BSSP",
+        "ref_id": "Rotate-Image-and-Crop-using-SplineOps",
         "headings": [
           "Example of doing an image rotation in 2D and comparing against Scipy",
-          "Rotate Image and Crop using BSSP"
+          "Rotate Image and Crop using SplineOps"
         ]
       },
       "doc_lineno": null
@@ -1461,7 +1494,7 @@
       "doc_lineno": null
     },
     {
-      "source": "def benchmark_and_display_rotation(image, angle, degree, iterations):\n    \"\"\"\n    Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - iterations: The number of iterations to apply the rotation.\n    \"\"\"\n    start_time_custom = time.time()\n    custom_rotated_and_cropped_bssp = rotate_image_and_crop_bssp(\n        image, angle, degree=degree, mode=\"zero\", iterations=iterations\n    )\n    time_custom = time.time() - start_time_custom\n\n    start_time_scipy = time.time()\n    scipy_rotated_and_cropped = rotate_image_and_crop_scipy(\n        image, angle, order=degree, iterations=iterations\n    )\n    time_scipy = time.time() - start_time_scipy\n\n    bounds = calculate_inscribed_rectangle_bounds_from_image(image)\n    image_cropped = crop_image_to_bounds(image, bounds)\n    custom_rotated_and_cropped_bssp = crop_image_to_bounds(\n        custom_rotated_and_cropped_bssp, bounds\n    )\n    scipy_rotated_and_cropped = crop_image_to_bounds(scipy_rotated_and_cropped, bounds)\n\n    snr_bssp = calculate_snr(image_cropped, custom_rotated_and_cropped_bssp)\n    snr_scipy = calculate_snr(image_cropped, scipy_rotated_and_cropped)\n    mse_bssp = calculate_mse(image_cropped, custom_rotated_and_cropped_bssp)\n    mse_scipy = calculate_mse(image_cropped, scipy_rotated_and_cropped)\n\n    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 20))\n    axes[0].imshow(image_cropped, cmap=\"gray\")\n    axes[0].set_title(\"Original Image\")\n    axes[1].imshow(custom_rotated_and_cropped_bssp, cmap=\"gray\")\n    axes[1].set_title(\n        f\"BSSP Rotated\\nSNR: {snr_bssp:.2f}dB, MSE: {mse_bssp:.2e}\\nAngle: {angle}\u00b0, Iter: {iterations}\\nDegree: {degree}, Time: {time_custom:.2f}s\"\n    )\n    axes[2].imshow(scipy_rotated_and_cropped, cmap=\"gray\")\n    axes[2].set_title(\n        f\"SciPy Rotated\\nSNR: {snr_scipy:.2f}dB, MSE: {mse_scipy:.2e}\\nAngle: {angle}\u00b0, Iter: {iterations}\\nDegree: {degree}, Time: {time_scipy:.2f}s\"\n    )\n\n    plt.tight_layout()\n    plt.subplots_adjust(hspace=0.4, top=0.95, bottom=0.05)\n    plt.show()",
+      "source": "def benchmark_and_display_rotation(image, angle, degree, iterations):\n    \"\"\"\n    Perform a benchmark of the rotation operation for both splineops and SciPy libraries and display images.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - iterations: The number of iterations to apply the rotation.\n    \"\"\"\n    start_time_custom = time.time()\n    custom_rotated_and_cropped_splineops = rotate_image_and_crop_splineops(\n        image, angle, degree=degree, mode=\"zero\", iterations=iterations\n    )\n    time_custom = time.time() - start_time_custom\n\n    start_time_scipy = time.time()\n    scipy_rotated_and_cropped = rotate_image_and_crop_scipy(\n        image, angle, order=degree, iterations=iterations\n    )\n    time_scipy = time.time() - start_time_scipy\n\n    bounds = calculate_inscribed_rectangle_bounds_from_image(image)\n    image_cropped = crop_image_to_bounds(image, bounds)\n    custom_rotated_and_cropped_splineops = crop_image_to_bounds(\n        custom_rotated_and_cropped_splineops, bounds\n    )\n    scipy_rotated_and_cropped = crop_image_to_bounds(scipy_rotated_and_cropped, bounds)\n\n    snr_splineops = calculate_snr(image_cropped, custom_rotated_and_cropped_splineops)\n    snr_scipy = calculate_snr(image_cropped, scipy_rotated_and_cropped)\n    mse_splineops = calculate_mse(image_cropped, custom_rotated_and_cropped_splineops)\n    mse_scipy = calculate_mse(image_cropped, scipy_rotated_and_cropped)\n\n    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 20))\n    axes[0].imshow(image_cropped, cmap=\"gray\")\n    axes[0].set_title(\"Original Image\")\n    axes[1].imshow(custom_rotated_and_cropped_splineops, cmap=\"gray\")\n    axes[1].set_title(\n        f\"SplineOps Rotated\\nSNR: {snr_splineops:.2f}dB, MSE: {mse_splineops:.2e}\\nAngle: {angle}\u00b0, Iter: {iterations}\\nDegree: {degree}, Time: {time_custom:.2f}s\"\n    )\n    axes[2].imshow(scipy_rotated_and_cropped, cmap=\"gray\")\n    axes[2].set_title(\n        f\"SciPy Rotated\\nSNR: {snr_scipy:.2f}dB, MSE: {mse_scipy:.2e}\\nAngle: {angle}\u00b0, Iter: {iterations}\\nDegree: {degree}, Time: {time_scipy:.2f}s\"\n    )\n\n    plt.tight_layout()\n    plt.subplots_adjust(hspace=0.4, top=0.95, bottom=0.05)\n    plt.show()",
       "names": [
         {
           "import_components": [
