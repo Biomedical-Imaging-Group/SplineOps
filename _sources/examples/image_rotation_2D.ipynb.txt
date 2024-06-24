@@ -163,6 +163,8 @@
    "outputs": [],
    "source": [
     "for spline_degree in range(4):\n",
+    "    if spline_degree == 2:\n",
+    "        continue  # Skip degree 2 to reduce file size\n",
     "    fig, ax = plt.subplots()\n",
     "    ax.axis('off')\n",
     "    original_image = image_resized.copy()\n",

@@ -913,7 +913,7 @@
       "doc_lineno": null
     },
     {
-      "source": "for spline_degree in range(4):\n    fig, ax = plt.subplots()\n    ax.axis('off')\n    original_image = image_resized.copy()\n    image_rotated = original_image.copy()\n    image_plot = ax.imshow(image_rotated, cmap='gray')\n\n    # Animation function\n    def animate(frame):\n        global image_rotated\n        if frame > 0:\n            image_rotated = rotate_image_splineops(image_rotated, 10, degree=spline_degree)  # Rotate by 10 degrees each frame\n        image_plot.set_data(image_rotated)\n        return [image_plot]\n\n    # Create the animation\n    ani = animation.FuncAnimation(fig, animate, frames=36, interval=50, blit=True)\n    plt.close(fig)  # Prevents the initial still image from displaying\n    custom_html = ani.to_jshtml()\n\n    # Customize the HTML and JavaScript\n    custom_html = custom_html.replace(\n        '<select id=\"animation_mode\">',\n        '<select id=\"animation_mode\" style=\"display:none\">'\n    ).replace(\n        'mode: \"once\",',\n        'mode: \"loop\",'\n    )\n    custom_html = custom_html.replace(\n        'buttons.push(mode_menu);',\n        ''\n    )\n    display(HTML(f\"<h3>Animation with bspline of degree {spline_degree}</h3>\"))\n    display(HTML(custom_html))",
+      "source": "for spline_degree in range(4):\n    if spline_degree == 2:\n        continue  # Skip degree 2 to reduce file size\n    fig, ax = plt.subplots()\n    ax.axis('off')\n    original_image = image_resized.copy()\n    image_rotated = original_image.copy()\n    image_plot = ax.imshow(image_rotated, cmap='gray')\n\n    # Animation function\n    def animate(frame):\n        global image_rotated\n        if frame > 0:\n            image_rotated = rotate_image_splineops(image_rotated, 10, degree=spline_degree)  # Rotate by 10 degrees each frame\n        image_plot.set_data(image_rotated)\n        return [image_plot]\n\n    # Create the animation\n    ani = animation.FuncAnimation(fig, animate, frames=36, interval=50, blit=True)\n    plt.close(fig)  # Prevents the initial still image from displaying\n    custom_html = ani.to_jshtml()\n\n    # Customize the HTML and JavaScript\n    custom_html = custom_html.replace(\n        '<select id=\"animation_mode\">',\n        '<select id=\"animation_mode\" style=\"display:none\">'\n    ).replace(\n        'mode: \"once\",',\n        'mode: \"loop\",'\n    )\n    custom_html = custom_html.replace(\n        'buttons.push(mode_menu);',\n        ''\n    )\n    display(HTML(f\"<h3>Animation with bspline of degree {spline_degree}</h3>\"))\n    display(HTML(custom_html))",
       "names": [
         {
           "import_components": [
@@ -932,8 +932,8 @@
             "subplots"
           ],
           "code_str": "plt.subplots",
-          "lineno": 2,
-          "end_lineno": 2,
+          "lineno": 4,
+          "end_lineno": 4,
           "context": "none",
           "resolved_location": "matplotlib.pyplot.subplots"
         },
@@ -944,8 +944,8 @@
             "FuncAnimation"
           ],
           "code_str": "animation.FuncAnimation",
-          "lineno": 17,
-          "end_lineno": 17,
+          "lineno": 19,
+          "end_lineno": 19,
           "context": "none",
           "resolved_location": "matplotlib.animation.FuncAnimation"
         },
@@ -957,8 +957,8 @@
             "()"
           ],
           "code_str": "ani",
-          "lineno": 17,
-          "end_lineno": 17,
+          "lineno": 19,
+          "end_lineno": 19,
           "context": "none",
           "resolved_location": "matplotlib.animation.FuncAnimation"
         },
@@ -969,8 +969,8 @@
             "close"
           ],
           "code_str": "plt.close",
-          "lineno": 18,
-          "end_lineno": 18,
+          "lineno": 20,
+          "end_lineno": 20,
           "context": "none",
           "resolved_location": "matplotlib.pyplot.close"
         },
@@ -983,8 +983,8 @@
             "to_jshtml"
           ],
           "code_str": "ani.to_jshtml",
-          "lineno": 19,
-          "end_lineno": 19,
+          "lineno": 21,
+          "end_lineno": 21,
           "context": "none",
           "resolved_location": "matplotlib.animation.Animation.to_jshtml"
         }
