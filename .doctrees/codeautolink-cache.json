@@ -875,8 +875,56 @@
       "doc_lineno": null
     },
     {
-      "source": "# Create a figure and axis\nfig, ax = plt.subplots()\nax.axis('off')\noriginal_image = image_resized.copy()\nimage_rotated = original_image.copy()\nimage_plot = ax.imshow(image_rotated, cmap='gray')\n\n# Animation function\ndef animate(frame):\n    global image_rotated\n    if frame > 0:\n        image_rotated = rotate_image_splineops(image_rotated, 5, degree=degree)  # Rotate by 5 degrees each frame\n    image_plot.set_data(image_rotated)\n    return [image_plot]\n\n# Create the animation\nani = animation.FuncAnimation(fig, animate, frames=73, interval=50, blit=True)\nplt.close(fig)  # Prevents the initial still image from displaying\ndisplay(HTML(ani.to_jshtml()))",
+      "source": "# Rotate the image by 45 degrees using spline of degree 3\nrotated_image_45 = rotate_image_splineops(image_resized, 45, degree=3)\n\n# Display the original and rotated images\nfig, ax = plt.subplots(1, 2, figsize=(12, 6))\nax[0].imshow(image_resized, cmap='gray')\nax[0].set_title('Original Image')\nax[0].axis('off')\nax[1].imshow(rotated_image_45, cmap='gray')\nax[1].set_title('Rotated Image (45 degrees, spline degree 3)')\nax[1].axis('off')\nplt.show()",
       "names": [
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "subplots"
+          ],
+          "code_str": "plt.subplots",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.subplots"
+        },
+        {
+          "import_components": [
+            "matplotlib",
+            "pyplot",
+            "show"
+          ],
+          "code_str": "plt.show",
+          "lineno": 12,
+          "end_lineno": 12,
+          "context": "none",
+          "resolved_location": "matplotlib.pyplot.show"
+        }
+      ],
+      "example": {
+        "document": "examples/image_rotation_2D",
+        "ref_id": "Perform-Rotation-of-45-Degrees",
+        "headings": [
+          "2D Image Rotation Animation",
+          "Perform Rotation of 45 Degrees"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": "for spline_degree in range(4):\n    fig, ax = plt.subplots()\n    ax.axis('off')\n    original_image = image_resized.copy()\n    image_rotated = original_image.copy()\n    image_plot = ax.imshow(image_rotated, cmap='gray')\n\n    # Animation function\n    def animate(frame):\n        global image_rotated\n        if frame > 0:\n            image_rotated = rotate_image_splineops(image_rotated, 10, degree=spline_degree)  # Rotate by 10 degrees each frame\n        image_plot.set_data(image_rotated)\n        return [image_plot]\n\n    # Create the animation\n    ani = animation.FuncAnimation(fig, animate, frames=36, interval=50, blit=True)\n    plt.close(fig)  # Prevents the initial still image from displaying\n    custom_html = ani.to_jshtml()\n\n    # Customize the HTML and JavaScript\n    custom_html = custom_html.replace(\n        '<select id=\"animation_mode\">',\n        '<select id=\"animation_mode\" style=\"display:none\">'\n    ).replace(\n        'mode: \"once\",',\n        'mode: \"loop\",'\n    )\n    custom_html = custom_html.replace(\n        'buttons.push(mode_menu);',\n        ''\n    )\n    display(HTML(f\"<h3>Animation with bspline of degree {spline_degree}</h3>\"))\n    display(HTML(custom_html))",
+      "names": [
+        {
+          "import_components": [
+            "range"
+          ],
+          "code_str": "range",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "none",
+          "resolved_location": "range"
+        },
         {
           "import_components": [
             "matplotlib",
