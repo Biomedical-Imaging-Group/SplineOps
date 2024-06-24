@@ -530,7 +530,7 @@ document.write(`
     <span class="n">mse_bssp</span> <span class="o">=</span> <span class="n">calculate_mse</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">custom_rotated_and_cropped_bssp</span><span class="p">)</span>
     <span class="n">mse_scipy</span> <span class="o">=</span> <span class="n">calculate_mse</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">scipy_rotated_and_cropped</span><span class="p">)</span>
 
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_cropped</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Original Image"</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">custom_rotated_and_cropped_bssp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
@@ -543,7 +543,7 @@ document.write(`
     <span class="p">)</span>
 
     <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
-    <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots_adjust.html#matplotlib.pyplot.subplots_adjust" title="matplotlib.pyplot.subplots_adjust"><span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span></a><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+    <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots_adjust.html#matplotlib.pyplot.subplots_adjust" title="matplotlib.pyplot.subplots_adjust"><span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span></a><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
     <a class="sphinx-codeautolink-a" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
@@ -580,8 +580,69 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_image_rotation_2D_comparison_scipy_17_0.png" src="../_images/examples_image_rotation_2D_comparison_scipy_17_0.png"/>
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">CUDARuntimeError</span>                          Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[9], line 17</span>
+<span class="ansi-green-intense-fg ansi-bold">     14</span> image_resized <span style="color: rgb(98,98,98)">=</span> image_resized<span style="color: rgb(98,98,98)">.</span>astype(np<span style="color: rgb(98,98,98)">.</span>float32)
+<span class="ansi-green-intense-fg ansi-bold">     16</span> <span style="color: rgb(95,135,135)"># Benchmark and display rotation results</span>
+<span class="ansi-green-fg">---&gt; 17</span> <span class="ansi-yellow-bg">benchmark_and_display_rotation</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">image_resized</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">angle</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">iterations</span><span class="ansi-yellow-bg">)</span>
+
+Cell <span class="ansi-green-fg">In[8], line 12</span>, in <span class="ansi-cyan-fg">benchmark_and_display_rotation</span><span class="ansi-blue-fg">(image, angle, degree, iterations)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span style="color: rgb(175,0,0)">"""</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span style="color: rgb(175,0,0)">Perform a benchmark of the rotation operation for both BSSP and SciPy libraries and display images.</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> <span style="color: rgb(175,0,0)">- iterations: The number of iterations to apply the rotation.</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span style="color: rgb(175,0,0)">"""</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> start_time_custom <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time()
+<span class="ansi-green-fg">---&gt; 12</span> custom_rotated_and_cropped_bssp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">rotate_image_and_crop_bssp</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">image</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">angle</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">degree</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">zero</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">"</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">iterations</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">iterations</span>
+<span class="ansi-green-intense-fg ansi-bold">     14</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span> time_custom <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time() <span style="color: rgb(98,98,98)">-</span> start_time_custom
+<span class="ansi-green-intense-fg ansi-bold">     17</span> start_time_scipy <span style="color: rgb(98,98,98)">=</span> time<span style="color: rgb(98,98,98)">.</span>time()
+
+Cell <span class="ansi-green-fg">In[6], line 21</span>, in <span class="ansi-cyan-fg">rotate_image_and_crop_bssp</span><span class="ansi-blue-fg">(image, angle, degree, mode, iterations)</span>
+<span class="ansi-green-intense-fg ansi-bold">     18</span> yy <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>linspace(<span style="color: rgb(98,98,98)">0</span>, ny <span style="color: rgb(98,98,98)">-</span> <span style="color: rgb(98,98,98)">1</span>, ny, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
+<span class="ansi-green-intense-fg ansi-bold">     19</span> data <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>ascontiguousarray(image, dtype<span style="color: rgb(98,98,98)">=</span>dtype)
+<span class="ansi-green-fg">---&gt; 21</span> rotated_image_cp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">cp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">asarray</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span> xx_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(xx)
+<span class="ansi-green-intense-fg ansi-bold">     23</span> yy_cp <span style="color: rgb(98,98,98)">=</span> cp<span style="color: rgb(98,98,98)">.</span>asarray(yy)
+
+File <span class="ansi-green-fg">/usr/share/miniconda/envs/splineops_env/lib/python3.9/site-packages/cupy/_creation/from_data.py:88</span>, in <span class="ansi-cyan-fg">asarray</span><span class="ansi-blue-fg">(a, dtype, order, blocking)</span>
+<span class="ansi-green-intense-fg ansi-bold">     56</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">asarray</span>(a, dtype<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, order<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span style="color: rgb(98,98,98)">*</span>, blocking<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>):
+<span class="ansi-green-intense-fg ansi-bold">     57</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">"""Converts an object to array.</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>
+<span class="ansi-green-intense-fg ansi-bold">     59</span> <span style="color: rgb(175,0,0)">    This is equivalent to ``array(a, dtype, copy=False, order=order)``.</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">     86</span>
+<span class="ansi-green-intense-fg ansi-bold">     87</span> <span style="color: rgb(175,0,0)">    """</span>
+<span class="ansi-green-fg">---&gt; 88</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">_core</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">a</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dtype</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">blocking</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2383</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2410</span>, in <span class="ansi-cyan-fg">cupy._core.core.array</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:2553</span>, in <span class="ansi-cyan-fg">cupy._core.core._array_default</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:135</span>, in <span class="ansi-cyan-fg">cupy._core.core.ndarray.__new__</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/_core/core.pyx:223</span>, in <span class="ansi-cyan-fg">cupy._core.core._ndarray_base._init</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:738</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.alloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1424</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/memory.pyx:1444</span>, in <span class="ansi-cyan-fg">cupy.cuda.memory.MemoryPool.malloc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy/cuda/device.pyx:40</span>, in <span class="ansi-cyan-fg">cupy.cuda.device.get_device_id</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:202</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.getDevice</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">cupy_backends/cuda/api/runtime.pyx:146</span>, in <span class="ansi-cyan-fg">cupy_backends.cuda.api.runtime.check_status</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">CUDARuntimeError</span>: cudaErrorInsufficientDriver: CUDA driver version is insufficient for CUDA runtime version
+</pre></div></div>
 </div>
 </section>
 </section>
