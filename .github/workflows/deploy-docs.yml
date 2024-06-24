@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          lfs: true  # Enable LFS
 
       - name: Set up Conda
         uses: conda-incubator/setup-miniconda@v2
@@ -41,6 +43,12 @@ jobs:
 
       - name: Install Pandoc
         uses: pandoc/actions/setup@main
+
+      - name: Install Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install git-lfs
+          git lfs install
 
       - name: Build documentation
         run: conda run -n splineops_env sphinx-build -b html docs/ docs/build/html
