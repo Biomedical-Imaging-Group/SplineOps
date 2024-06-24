@@ -1274,7 +1274,7 @@
       "doc_lineno": null
     },
     {
-      "source": "def rotate_image_and_crop_splineops(image, angle, degree=3, mode=\"zero\", iterations=1):\n    \"\"\"\n    Rotate an image by a specified angle using the splineops library's TensorSpline method and crop the result.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - mode: The mode for handling boundaries (default is \"zero\").\n    - iterations: The number of iterations to apply the rotation.\n\n    Returns:\n    - Rotated image as a 2D numpy array.\n    \"\"\"\n    dtype = image.dtype\n    ny, nx = image.shape\n    xx = np.linspace(0, nx - 1, nx, dtype=dtype)\n    yy = np.linspace(0, ny - 1, ny, dtype=dtype)\n    data = np.ascontiguousarray(image, dtype=dtype)\n\n    degree = max(0, min(degree, 7))\n    basis = f\"bspline{degree}\"\n\n    for _ in range(iterations):\n        tensor_spline = TensorSpline(\n            data=data, coordinates=(yy, xx), bases=basis, modes=mode\n        )\n        angle_rad = np.radians(-angle)\n        cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)\n        original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0\n        oy, ox = np.ogrid[0:ny, 0:nx]\n        ox = ox - original_center_x\n        oy = oy - original_center_y\n\n        nx_coords = cos_angle * ox + sin_angle * oy + original_center_x\n        ny_coords = -sin_angle * ox + cos_angle * oy + original_center_y\n\n        eval_coords = np.asarray(ny_coords.flatten()), np.asarray(\n            nx_coords.flatten()\n        )\n        interpolated_values = tensor_spline(coordinates=eval_coords, grid=False)\n        rotated_image = interpolated_values.reshape(ny, nx)\n\n    return rotated_image",
+      "source": "def rotate_image_and_crop_splineops(image, angle, degree=3, mode=\"zero\", iterations=1):\n    \"\"\"\n    Rotate an image by a specified angle using the splineops library's TensorSpline method and crop the result.\n\n    Parameters:\n    - image: The input image as a 2D numpy array.\n    - angle: The rotation angle in degrees.\n    - degree: The degree of the spline (0-7).\n    - mode: The mode for handling boundaries (default is \"zero\").\n    - iterations: The number of iterations to apply the rotation.\n\n    Returns:\n    - Rotated image as a 2D numpy array.\n    \"\"\"\n    dtype = image.dtype\n    ny, nx = image.shape\n    xx = np.linspace(0, nx - 1, nx, dtype=dtype)\n    yy = np.linspace(0, ny - 1, ny, dtype=dtype)\n    data = np.ascontiguousarray(image, dtype=dtype)\n    rotated_image = data\n\n    degree = max(0, min(degree, 7))\n    basis = f\"bspline{degree}\"\n\n    for _ in range(iterations):\n        tensor_spline = TensorSpline(\n            data=rotated_image, coordinates=(yy, xx), bases=basis, modes=mode\n        )\n        angle_rad = np.radians(-angle)\n        cos_angle, sin_angle = np.cos(angle_rad), np.sin(angle_rad)\n        original_center_x, original_center_y = (nx - 1) / 2.0, (ny - 1) / 2.0\n        oy, ox = np.ogrid[0:ny, 0:nx]\n        ox = ox - original_center_x\n        oy = oy - original_center_y\n\n        nx_coords = cos_angle * ox + sin_angle * oy + original_center_x\n        ny_coords = -sin_angle * ox + cos_angle * oy + original_center_y\n\n        eval_coords = ny_coords.flatten(), nx_coords.flatten()\n        interpolated_values = tensor_spline(coordinates=eval_coords, grid=False)\n        rotated_image = interpolated_values.reshape(ny, nx)\n\n    return rotated_image",
       "names": [
         {
           "import_components": [
@@ -1314,8 +1314,8 @@
             "min"
           ],
           "code_str": "min",
-          "lineno": 21,
-          "end_lineno": 21,
+          "lineno": 22,
+          "end_lineno": 22,
           "context": "none",
           "resolved_location": "min"
         },
@@ -1324,8 +1324,8 @@
             "max"
           ],
           "code_str": "max",
-          "lineno": 21,
-          "end_lineno": 21,
+          "lineno": 22,
+          "end_lineno": 22,
           "context": "none",
           "resolved_location": "max"
         },
@@ -1334,8 +1334,8 @@
             "range"
           ],
           "code_str": "range",
-          "lineno": 24,
-          "end_lineno": 24,
+          "lineno": 25,
+          "end_lineno": 25,
           "context": "none",
           "resolved_location": "range"
         },
@@ -1347,8 +1347,8 @@
             "TensorSpline"
           ],
           "code_str": "TensorSpline",
-          "lineno": 25,
-          "end_lineno": 25,
+          "lineno": 26,
+          "end_lineno": 26,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         },
@@ -1361,8 +1361,8 @@
             "()"
           ],
           "code_str": "tensor_spline",
-          "lineno": 25,
-          "end_lineno": 25,
+          "lineno": 26,
+          "end_lineno": 26,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         },
@@ -1372,8 +1372,8 @@
             "radians"
           ],
           "code_str": "np.radians",
-          "lineno": 28,
-          "end_lineno": 28,
+          "lineno": 29,
+          "end_lineno": 29,
           "context": "none",
           "resolved_location": "numpy.radians"
         },
@@ -1383,8 +1383,8 @@
             "cos"
           ],
           "code_str": "np.cos",
-          "lineno": 29,
-          "end_lineno": 29,
+          "lineno": 30,
+          "end_lineno": 30,
           "context": "none",
           "resolved_location": "numpy.cos"
         },
@@ -1394,8 +1394,8 @@
             "sin"
           ],
           "code_str": "np.sin",
-          "lineno": 29,
-          "end_lineno": 29,
+          "lineno": 30,
+          "end_lineno": 30,
           "context": "none",
           "resolved_location": "numpy.sin"
         },
@@ -1405,32 +1405,10 @@
             "ogrid"
           ],
           "code_str": "np.ogrid",
-          "lineno": 31,
-          "end_lineno": 31,
+          "lineno": 32,
+          "end_lineno": 32,
           "context": "none",
           "resolved_location": "numpy.ogrid"
-        },
-        {
-          "import_components": [
-            "numpy",
-            "asarray"
-          ],
-          "code_str": "np.asarray",
-          "lineno": 38,
-          "end_lineno": 38,
-          "context": "none",
-          "resolved_location": "numpy.asarray"
-        },
-        {
-          "import_components": [
-            "numpy",
-            "asarray"
-          ],
-          "code_str": "np.asarray",
-          "lineno": 38,
-          "end_lineno": 38,
-          "context": "none",
-          "resolved_location": "numpy.asarray"
         },
         {
           "import_components": [
@@ -1441,8 +1419,8 @@
             "()"
           ],
           "code_str": "tensor_spline",
-          "lineno": 41,
-          "end_lineno": 41,
+          "lineno": 40,
+          "end_lineno": 40,
           "context": "none",
           "resolved_location": "splineops.interpolate.tensorspline.TensorSpline"
         }
