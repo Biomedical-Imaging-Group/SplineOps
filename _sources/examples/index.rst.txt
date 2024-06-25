@@ -1,6 +1,12 @@
 Example Gallery
 ###############
 
+.. raw:: html
+
+   <a href="https://mybinder.org/v2/gh/Biomedical-Imaging-Group/splineops/main?filepath=docs/examples/">
+       <img alt="Binder" src="https://mybinder.org/badge_logo.svg">
+   </a>
+
 .. toctree::
    :maxdepth: 1
    :caption: Example Gallery
