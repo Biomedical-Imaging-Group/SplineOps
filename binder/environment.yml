@@ -9,6 +9,7 @@ dependencies:
   - scipy=1.13.1
   - matplotlib=3.8.4
   - jupyterlab=3.6.1
+  - conda-forge::conda  # Ensures Conda is updated from the conda-forge channel
   - pip
   - pip:
       - git+https://github.com/Biomedical-Imaging-Group/splineops.git@main#egg=splineops
