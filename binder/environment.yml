@@ -5,6 +5,7 @@ dependencies:
   - python=3.9.19
   - pooch=1.7.0
   - numpy=2.0.0
+  - cupy=13.2.0
   - scipy=1.13.1
   - matplotlib=3.8.4
   - jupyterlab=3.6.1
